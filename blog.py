@@ -24,7 +24,7 @@ def valid_password(password):
     return PASSWORD_RE.match(password)
 
 def valid_email(email):
-    return EMAIL_RE.match(email)
+    return not email or EMAIL_RE.match(email)
 
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
@@ -61,24 +61,22 @@ class Signup(Handler):
         # if the user is sent to the welcome page (everything is valid)
         have_errors = False
 
-        check_username = valid_username(username)
-        check_password = valid_password(password)
-        check_email = valid_email(email)
-
         # things to return to the script when there are errors
         params = dict(username = username,
                       email = email)
 
         # run checks on username, password, email. adds error messages
-        if not username or check_username is None:
+        if not valid_username(username):
             params['e_username'] = "Invalid username!"
             have_errors = True
-        if not password or check_password is None:
+
+        if not valid_password(password):
             params['e_password'] = "Invalid password!"
             have_errors = True
-        if password != verify:
+        elif password != verify:
             params['e_password'] = "Passwords do not match!"
-        if email != '' and check_email is None:
+
+        if not valid_email(email):
             params['e_email'] = "Invalid email!"
             have_errors = True
 
