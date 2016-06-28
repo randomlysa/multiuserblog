@@ -12,6 +12,19 @@ jinja_env = jinja2.Environment(
     autoescape=True
 )
 
+# set regular expressions for checking username, password, email
+USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+PASSWORD_RE = re.compile(r"^.{3,20}$")
+EMAIL_RE = re.compile(r"^[\S]+@[\S]+.[\S]+$")
+
+def valid_username(username):
+    return USER_RE.match(username)
+
+def valid_password(password):
+    return PASSWORD_RE.match(password)
+
+def valid_email(email):
+    return EMAIL_RE.match(email)
 
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
@@ -47,20 +60,6 @@ class Signup(Handler):
         # determines if the form is reloaded (invalid) or
         # if the user is sent to the welcome page (everything is valid)
         have_errors = False
-
-        # set regular expressions for checking username, password, email
-        USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
-        PASSWORD_RE = re.compile(r"^.{3,20}$")
-        EMAIL_RE = re.compile(r"^[\S]+@[\S]+.[\S]+$")
-
-        def valid_username(username):
-            return USER_RE.match(username)
-
-        def valid_password(password):
-            return PASSWORD_RE.match(password)
-
-        def valid_email(email):
-            return EMAIL_RE.match(email)
 
         check_username = valid_username(username)
         check_password = valid_password(password)
