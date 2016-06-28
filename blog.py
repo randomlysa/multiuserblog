@@ -6,6 +6,8 @@ import jinja2
 import re
 import logging
 
+from google.appengine.ext import db
+
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(template_dir),
@@ -93,9 +95,27 @@ class Welcome(Handler):
         else:
             self.redirect('/blog/signup')
 
+class dbNewEntry(db.Model):
+    '''Gets subject and body for a blog entry.'''
+    subject = db.StringProperty(required=True)
+    body = db.TextProperty(required=True)
+    postcreated = db.DateTimeProperty(auto_now_add=True)
+
 class NewEntry(Handler):
     def get(self):
         self.render('newentry.html', postsubject='', postbody='')
+
+    def post(self):
+        subject = self.request.get("subject")
+        body = self.request.get("body")
+
+        if subject and body:
+            entry = dbNewEntry(subject=subject, body=body)
+            entry.put()
+        if not subject:
+            error = "A subject is required."
+        if not body:
+            error = "A body is required."
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
