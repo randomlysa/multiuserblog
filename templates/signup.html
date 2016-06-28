@@ -1,0 +1,25 @@
+<h1>Signup</h1>
+<br />
+<form action="/signup" method="post">
+    <label>
+        Username:
+        <input type="text" name="username" value="{{username}}"><span>{{e_username}}</span>
+        <br>
+    </label>
+    <label>
+        Password:
+        <input type="password" name="password">
+        <br>
+    </label>
+    <label>
+        Verify Password:
+        <input type="password" name="verify"><span>{{e_password}}</span>
+        <br>
+    </label>
+    <label>
+        Email (optional):
+        <input type="text" name="email"><span>{{e_email}}</span>
+        <br>
+    </label>
+    <input type="submit">
+</form>
