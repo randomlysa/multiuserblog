@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>New Blog Entry</title>
+  </head>
+
+    <body>
+        <h2>New Blog Entry</h2>
+        <form action="/blog/newentry" method="post">
+            <label>
+                Subject:
+                <input type="text" name="subject" value="{{postsubject}}">
+            </label>
+
+            <br>
+
+            <label>
+                Body:
+                <textarea name="body">{{postbody}}</textarea>
+            </label>
+
+            <br>
+
+            <label>
+                <input type="submit" value="post it!">
+            </label>
+        </form>
+    </body>
+</html>

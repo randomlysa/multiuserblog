@@ -93,8 +93,13 @@ class Welcome(Handler):
         else:
             self.redirect('/blog/signup')
 
+class NewEntry(Handler):
+    def get(self):
+        self.render('newentry.html', postsubject='', postbody='')
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/blog/signup', Signup),
     ('/blog/welcome', Welcome),
+    ('/blog/newentry', NewEntry),
 ], debug=True)
