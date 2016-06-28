@@ -103,19 +103,29 @@ class dbNewEntry(db.Model):
 
 class NewEntry(Handler):
     def get(self):
-        self.render('newentry.html', postsubject='', postbody='')
+        self.render(
+                    'newentry.html',
+                    subject='',
+                    body='',
+                    error_subject='',
+                    error_body=''
+         )
 
     def post(self):
         subject = self.request.get("subject")
         body = self.request.get("body")
+        errors = {}
 
         if subject and body:
             entry = dbNewEntry(subject=subject, body=body)
             entry.put()
+            # get new post and redirect to it
         if not subject:
-            error = "A subject is required."
+            errors['error_subject'] = "A subject is required."
         if not body:
-            error = "A body is required."
+            errors['error_body'] = "A body is required."
+        if not subject or not body:
+            self.render('newentry.html', subject=subject, body=body, **errors)
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),

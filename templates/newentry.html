@@ -9,15 +9,16 @@
         <h2>New Blog Entry</h2>
         <form action="/blog/newentry" method="post">
             <label>
-                Subject:
+                Subject: <span class="error">{{error_subject}}</span><br>
                 <input type="text" name="subject" value="{{subject}}">
             </label>
 
             <br>
 
             <label>
-                Body:
+                Body:  <span class="error">{{error_body}}</span><br>
                 <textarea name="body">{{body}}</textarea>
+
             </label>
 
             <br>
