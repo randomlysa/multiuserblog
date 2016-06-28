@@ -102,30 +102,30 @@ class dbNewEntry(db.Model):
     postcreated = db.DateTimeProperty(auto_now_add=True)
 
 class NewEntry(Handler):
+    items = ('subject', 'body', 'error_subject', 'error_body')
+    params = dict.fromkeys(items, '')
+
     def get(self):
-        self.render(
-                    'newentry.html',
-                    subject='',
-                    body='',
-                    error_subject='',
-                    error_body=''
-         )
+        self.render('newentry.html', **NewEntry.params)
 
     def post(self):
         subject = self.request.get("subject")
         body = self.request.get("body")
-        errors = {}
+
 
         if subject and body:
             entry = dbNewEntry(subject=subject, body=body)
             entry.put()
             # get new post and redirect to it
         if not subject:
-            errors['error_subject'] = "A subject is required."
+            NewEntry.params['error_subject'] = "A subject is required."
         if not body:
-            errors['error_body'] = "A body is required."
+            NewEntry.params['error_body'] = "A body is required."
         if not subject or not body:
-            self.render('newentry.html', subject=subject, body=body, **errors)
+            # add subject and body only if there is an error
+            NewEntry.params['subject'] = subject
+            NewEntry.params['body'] = body
+            self.render('newentry.html', **NewEntry.params)
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
