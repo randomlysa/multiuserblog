@@ -41,11 +41,13 @@ class Handler(webapp2.RequestHandler):
         self.write(self.render_str(template, **kw))
 
 
+class RedirectToMainPage(Handler):
+    def get(self):
+        self.redirect('/blog')
+
 class MainPage(Handler):
     def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Hello, World!')
-
+        self.render('main.html')
 
 class Signup(Handler):
     def get(self):
@@ -128,7 +130,8 @@ class NewEntry(Handler):
             self.render('newentry.html', **NewEntry.params)
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage),
+    ('/', RedirectToMainPage),
+    ('/blog', MainPage),
     ('/blog/signup', Signup),
     ('/blog/welcome', Welcome),
     ('/blog/newentry', NewEntry),
