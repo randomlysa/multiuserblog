@@ -49,7 +49,12 @@ class RedirectToMainPage(Handler):
 class MainPage(Handler):
     '''Shows 10 newest posts.'''
     def get(self):
-        self.render('main.html')
+        entries = db.GqlQuery(
+            "SELECT * FROM dbNewEntry ORDER BY postcreated DESC LIMIT 10"
+        )
+        logging.info(entries)
+        self.render('main.html', entries=entries)
+
 
 class Signup(Handler):
     def get(self):
