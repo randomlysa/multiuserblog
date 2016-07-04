@@ -28,6 +28,16 @@ def valid_password(password):
 def valid_email(email):
     return not email or EMAIL_RE.match(email)
 
+# db item(s)
+
+
+class BlogPost(db.Model):
+    '''Gets subject and body for a blog post.'''
+    subject = db.StringProperty(required=True)
+    body = db.TextProperty(required=True)
+    postcreated = db.DateTimeProperty(auto_now_add=True)
+
+
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
@@ -106,11 +116,6 @@ class Welcome(Handler):
         else:
             self.redirect('/blog/signup')
 
-class dbNewEntry(db.Model):
-    '''Gets subject and body for a blog entry.'''
-    subject = db.StringProperty(required=True)
-    body = db.TextProperty(required=True)
-    postcreated = db.DateTimeProperty(auto_now_add=True)
 
 class NewEntry(Handler):
     '''For adding new entries to the blog.'''
