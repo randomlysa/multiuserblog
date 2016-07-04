@@ -61,7 +61,7 @@ class MainPage(Handler):
     '''Shows 10 newest posts.'''
     def get(self):
         entries = db.GqlQuery(
-            "SELECT * FROM dbNewEntry ORDER BY postcreated DESC LIMIT 10"
+            "SELECT * FROM BlogPost ORDER BY postcreated DESC LIMIT 10"
         )
         logging.info(entries)
         self.render('main.html', entries=entries)
@@ -117,37 +117,39 @@ class Welcome(Handler):
             self.redirect('/blog/signup')
 
 
-class NewEntry(Handler):
+class CreateNewPost(Handler):
     '''For adding new entries to the blog.'''
     items = ('subject', 'body', 'error_subject', 'error_body')
     # create dictionary from items and set all values to empty.
     params = dict.fromkeys(items, '')
 
     def get(self):
-        self.render('newentry.html', **NewEntry.params)
+        self.render('newpost.html', **CreateNewPost.params)
 
     def post(self):
         subject = self.request.get("subject")
         body = self.request.get("body")
 
         if subject and body:
-            entry = dbNewEntry(subject=subject, body=body)
-            entry.put()
+            post = BlogPost(subject=subject, body=body)
+            post.put()
             # get new post and redirect to it
+            lastpost = "SELECT * from BlogPost order by postcreated desc limit 1"
+
         if not subject:
-            NewEntry.params['error_subject'] = "A subject is required."
+            CreateNewPost.params['error_subject'] = "A subject is required."
         if not body:
-            NewEntry.params['error_body'] = "A body is required."
+            CreateNewPost.params['error_body'] = "A body is required."
         if not subject or not body:
             # add subject and body only if there is an error
-            NewEntry.params['subject'] = subject
-            NewEntry.params['body'] = body
-            self.render('newentry.html', **NewEntry.params)
+            CreateNewPost.params['subject'] = subject
+            CreateNewPost.params['body'] = body
+            self.render('newpost.html', **CreateNewPost.params)
 
 app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
     ('/blog', MainPage),
     ('/blog/signup', Signup),
     ('/blog/welcome', Welcome),
-    ('/blog/newentry', NewEntry),
+    ('/blog/newpost', CreateNewPost),
 ], debug=True)
