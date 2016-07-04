@@ -36,16 +36,18 @@ class Handler(webapp2.RequestHandler):
         t = jinja_env.get_template(template)
         return t.render(params)
 
-    ''' takes render_str and sends to the browser '''
     def render(self, template, **kw):
+        '''Takes render_str and sends to the browser'''
         self.write(self.render_str(template, **kw))
 
 
 class RedirectToMainPage(Handler):
+    '''Redirect / to /blog'''
     def get(self):
         self.redirect('/blog')
 
 class MainPage(Handler):
+    '''Shows 10 newest posts.'''
     def get(self):
         self.render('main.html')
 
@@ -90,6 +92,7 @@ class Signup(Handler):
             self.redirect('/blog/welcome?username=' + username)
 
 class Welcome(Handler):
+    '''Redirected here on a successful signup.'''
     def get(self):
         username = self.request.get('username')
         if valid_username(username):
@@ -104,7 +107,9 @@ class dbNewEntry(db.Model):
     postcreated = db.DateTimeProperty(auto_now_add=True)
 
 class NewEntry(Handler):
+    '''For adding new entries to the blog.'''
     items = ('subject', 'body', 'error_subject', 'error_body')
+    # create dictionary from items and set all values to empty.
     params = dict.fromkeys(items, '')
 
     def get(self):
