@@ -128,13 +128,16 @@ class CreateNewPost(Handler):
 
     def post(self):
         subject = self.request.get("subject")
-        body = self.request.get("body")
+        body = self.request.get("content")
 
         if subject and body:
             post = BlogPost(subject=subject, body=body)
             post.put()
             # get new post and redirect to it
-            lastpost = "SELECT * from BlogPost order by postcreated desc limit 1"
+            redirect = post.key().id()
+            redirectint = int(redirect)
+            logging.info(redirect)
+            self.redirect("/blog/%s" % redirectint)
 
         if not subject:
             CreateNewPost.params['error_subject'] = "A subject is required."
