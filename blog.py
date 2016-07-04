@@ -38,6 +38,12 @@ class BlogPost(db.Model):
     postcreated = db.DateTimeProperty(auto_now_add=True)
 
 
+class User(db.Model):
+    '''User info.'''
+    username = db.StringProperty(required=True)
+    password = db.StringProperty(required=True)
+    email = db.EmailProperty(default='')
+
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
@@ -105,6 +111,10 @@ class Signup(Handler):
             # send back to the signup page on errors
             self.render('signup.html', **params)
         else:
+            # if everything is correct, add user to db, send to welcome page
+            user = User(username=username, password=password, email=email)
+            user.put()
+            userid = user.key().id()
             self.redirect('/blog/welcome?username=' + username)
 
 
