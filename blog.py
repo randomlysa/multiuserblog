@@ -32,7 +32,7 @@ def valid_email(email):
 
 
 class BlogPost(db.Model):
-    '''Gets subject and body for a blog post.'''
+    '''Subject and body for a blog post.'''
     subject = db.StringProperty(required=True)
     body = db.TextProperty(required=True)
     postcreated = db.DateTimeProperty(auto_now_add=True)
@@ -102,6 +102,7 @@ class Signup(Handler):
             have_errors = True
 
         if have_errors:
+            # send back to the signup page on errors
             self.render('signup.html', **params)
         else:
             self.redirect('/blog/welcome?username=' + username)
