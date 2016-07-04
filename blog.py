@@ -46,6 +46,7 @@ class RedirectToMainPage(Handler):
     def get(self):
         self.redirect('/blog')
 
+
 class MainPage(Handler):
     '''Shows 10 newest posts.'''
     def get(self):
@@ -73,8 +74,7 @@ class Signup(Handler):
         have_errors = False
 
         # things to return to the script when there are errors
-        params = dict(username = username,
-                      email = email)
+        params = dict(username=username, email=email)
 
         # run checks on username, password, email. adds error messages
         if not valid_username(username):
@@ -95,6 +95,7 @@ class Signup(Handler):
             self.render('signup.html', **params)
         else:
             self.redirect('/blog/welcome?username=' + username)
+
 
 class Welcome(Handler):
     '''Redirected here on a successful signup.'''
@@ -123,7 +124,6 @@ class NewEntry(Handler):
     def post(self):
         subject = self.request.get("subject")
         body = self.request.get("body")
-
 
         if subject and body:
             entry = dbNewEntry(subject=subject, body=body)
