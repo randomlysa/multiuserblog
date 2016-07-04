@@ -146,10 +146,27 @@ class CreateNewPost(Handler):
             CreateNewPost.params['body'] = body
             self.render('newpost.html', **CreateNewPost.params)
 
+
+class ShowPost(Handler):
+    '''Show a single post from the blog.'''
+    def get(self, postid):
+        """
+        postToShow = db.GqlQuery(
+            "SELECT * FROM BlogPost WHERE ID = :1", postid
+        )
+        """
+        postidint = int(postid)
+        postToShow = BlogPost.get_by_id(postidint)
+        logging.info(postToShow)
+
+        self.render('showpost.html', post=postToShow)
+
+
 app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
     ('/blog', MainPage),
     ('/blog/signup', Signup),
     ('/blog/welcome', Welcome),
     ('/blog/newpost', CreateNewPost),
+    ('/blog/(.*)', ShowPost),
 ], debug=True)
