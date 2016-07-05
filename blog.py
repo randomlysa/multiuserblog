@@ -75,7 +75,7 @@ def make_pw_hash(name, pw, salt = None):
 
 def valid_pw(name, pw, h):
     '''check if a name, pw, salt is correct'''
-    salt = h.split('.')[1]
+    salt = h.split(',')[1]
     return h == make_pw_hash(name, pw, salt)
 
 # db item(s)
