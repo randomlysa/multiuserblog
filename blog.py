@@ -161,8 +161,17 @@ class Signup(Handler):
             # send back to the signup page on errors
             self.render('signup.html', **params)
         else:
-            # if everything is correct, add user to db, send to welcome page
-            user = User(username=username, password=password, email=email)
+            # if everything is correct, hash/salt the password
+            password_salted = make_pw_hash(username, password, make_salt())
+
+            # info to send to the db to register the user
+            reginfo = dict(username=username, password=password_salted)
+            # add email to reginfo if it's not blank
+            if email:
+                reginfo['email'] = email
+
+            # then add user to db, send to welcome page
+            user = User(**reginfo)
             user.put()
             userid = str(user.key().id())
 
