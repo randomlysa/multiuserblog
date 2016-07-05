@@ -164,15 +164,7 @@ class CreateNewPost(Handler):
 class ShowPost(Handler):
     '''Show a single post from the blog.'''
     def get(self, postid):
-        """
-        postToShow = db.GqlQuery(
-            "SELECT * FROM BlogPost WHERE ID = :1", postid
-        )
-        """
-        postidint = int(postid)
-        postToShow = BlogPost.get_by_id(postidint)
-        logging.info(postToShow)
-
+        postToShow = BlogPost.get_by_id(int(postid))
         self.render('showpost.html', post=postToShow)
 
 
