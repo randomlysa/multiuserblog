@@ -170,6 +170,14 @@ class Signup(Handler):
             self.redirect('/blog/welcome')
 
 
+class Login(Handler):
+    '''Allows a registered user to login.'''
+    def get(self):
+        self.render('login.html')
+
+    def post(self):
+
+
 class Welcome(Handler):
     '''Redirected here on a successful signup.'''
     def get(self):
@@ -229,6 +237,7 @@ app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
     ('/blog', MainPage),
     ('/blog/signup', Signup),
+    ('/blog/login', Login),
     ('/blog/welcome', Welcome),
     ('/blog/newpost', CreateNewPost),
     ('/blog/(.*)', ShowPost),
