@@ -74,7 +74,8 @@ def make_pw_hash(name, pw, salt = None):
 
 
 def valid_pw(name, pw, h):
-    '''check if a name, pw, salt is correct'''
+    '''check if a name, pw, salt is correct
+    h = salted password, salt'''
     salt = h.split(',')[1]
     return h == make_pw_hash(name, pw, salt)
 
