@@ -161,15 +161,25 @@ class Signup(Handler):
             # if everything is correct, add user to db, send to welcome page
             user = User(username=username, password=password, email=email)
             user.put()
-            userid = user.key().id()
-            self.redirect('/blog/welcome?username=' + username)
+            userid = str(user.key().id())
+
+            # set a cookie with the userid|hash of userid
+            self.response.headers.add_header(
+                'Set-Cookie', 'userid=%s' % make_secure_val(userid)
+            )
+            self.redirect('/blog/welcome')
 
 
 class Welcome(Handler):
     '''Redirected here on a successful signup.'''
     def get(self):
-        username = self.request.get('username')
-        if valid_username(username):
+        useridwithhash = self.request.cookies.get('userid')
+        if check_secure_val(useridwithhash):
+            # if the userid/hash are correct in the cookie, get the username
+            # by using the userid
+            userid = useridwithhash.split('|')[0]
+            username = User.get_by_id(int(userid)).username
+
             self.render('welcome.html', username = username)
         else:
             self.redirect('/blog/signup')
