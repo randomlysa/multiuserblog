@@ -89,7 +89,7 @@ class User(db.Model):
     '''User info.'''
     username = db.StringProperty(required=True)
     password = db.StringProperty(required=True)
-    email = db.EmailProperty(default='')
+    email = db.EmailProperty(required=False)
 
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
