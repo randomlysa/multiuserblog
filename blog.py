@@ -47,10 +47,13 @@ def hash_str(s):
 
 
 def make_secure_val(s):
+    '''Uses hash_str to return a value with the "input|inputHashed"'''
     return "%s|%s" % (s, hash_str(s))
 
 
 def check_secure_val(h):
+    '''Checks that input|inputHashed hasn't been modified (that input
+    equals inputHashed)'''
     val = h.split('|')[0]
     if h == make_secure_val(val):
         return val
