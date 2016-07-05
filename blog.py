@@ -189,6 +189,22 @@ class Login(Handler):
         self.render('login.html')
 
     def post(self):
+        username = self.request.get('username')
+        password = self.request.get('password')
+
+        # get info about user from database
+        user = db.GqlQuery(
+            "SELECT * FROM User WHERE username = :1 LIMIT 1", username
+        ).get()
+
+        # h is the hashed salted password plus the salt separated by a comma
+        h = user.password
+
+        if valid_pw(username, password, h):
+            self.redirect('/blog/welcome')
+        else:
+            self.render('login.html')
+
 
 
 class Welcome(Handler):
