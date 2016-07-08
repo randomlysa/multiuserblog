@@ -229,6 +229,12 @@ class Login(Handler):
             self.render('login.html', **params)
 
 
+class Logout(Handler):
+    '''Set cookie userid to empty and redirect to /blog/signup.'''
+    def get(self):
+        self.response.headers.add_header('Set-Cookie', 'userid=')
+        self.redirect('/blog/signup')
+
 
 class Welcome(Handler):
     '''Redirected here on a successful signup.'''
@@ -294,6 +300,7 @@ app = webapp2.WSGIApplication([
     ('/blog', MainPage),
     ('/blog/signup', Signup),
     ('/blog/login', Login),
+    ('/blog/logout', Logout),
     ('/blog/welcome', Welcome),
     ('/blog/newpost', CreateNewPost),
     ('/blog/(.*)', ShowPost),
