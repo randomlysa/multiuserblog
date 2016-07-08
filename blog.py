@@ -121,7 +121,7 @@ class MainPage(Handler):
             "SELECT * FROM BlogPost ORDER BY postcreated DESC LIMIT 10"
         )
         logging.info(entries)
-        self.render('main.html', entries=entries)
+        self.render('posts.html', entries=entries)
 
 
 class Signup(Handler):
