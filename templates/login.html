@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+{% block title %}View Posts{% endblock %}
+{% block content %}
+
 <h1>Login</h1>
 <br />
 <form action="/blog/login" method="post">
@@ -14,3 +18,5 @@
     <br />
     <input type="submit">
 </form>
+
+{% endblock %}

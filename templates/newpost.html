@@ -1,31 +1,27 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+{% block title %}View Posts{% endblock %}
+{% block content %}
 
-<html>
-  <head>
-    <title>New Blog Entry</title>
-  </head>
+<h2>New Blog Entry</h2>
+<form action="/blog/newpost" method="post">
+    <label>
+        Subject: <span class="error">{{error_subject}}</span><br>
+        <input type="text" name="subject" value="{{subject}}">
+    </label>
 
-    <body>
-        <h2>New Blog Entry</h2>
-        <form action="/blog/newpost" method="post">
-            <label>
-                Subject: <span class="error">{{error_subject}}</span><br>
-                <input type="text" name="subject" value="{{subject}}">
-            </label>
+    <br>
 
-            <br>
+    <label>
+        Body:  <span class="error">{{error_body}}</span><br>
+        <textarea name="content">{{body}}</textarea>
 
-            <label>
-                Body:  <span class="error">{{error_body}}</span><br>
-                <textarea name="content">{{body}}</textarea>
+    </label>
 
-            </label>
+    <br>
 
-            <br>
+    <label>
+        <input type="submit" value="post it!">
+    </label>
+</form>
 
-            <label>
-                <input type="submit" value="post it!">
-            </label>
-        </form>
-    </body>
-</html>
+{% endblock %}

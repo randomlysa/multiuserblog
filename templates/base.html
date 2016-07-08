@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link href='https://fonts.googleapis.com/css?family=Cinzel:400,900|Old+Standard+TT:400,400italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/static/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} - My Blog</title>
+    {% endblock %}
+</head>
+<body>
+    <div id="header">
+        <a href="/blog/signup">Signup</a> |
+        <a href="/blog/login">Login</a> |
+        <a href="/blog/">Home</a> |
+        <a href="/blog"><h1>Udacity Blog</h1></a>
+    </div>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2016 by <a href="http://randomlysa.com/">me</a>.
+        {% endblock %}
+    </div>
+</body>
+</html>

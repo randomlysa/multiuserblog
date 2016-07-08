@@ -1,5 +1,17 @@
+{% extends "base.html" %}
+{% block title %}View Posts{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+
 {% for entry in entries %}
     <h2>{{entry.subject}}</h2>
     {{entry.body}}
     <hr />
 {% endfor %}
+
+{% endblock %}
