@@ -234,7 +234,11 @@ class Welcome(Handler):
     '''Redirected here on a successful signup.'''
     def get(self):
         useridwithhash = self.request.cookies.get('userid')
-        if check_secure_val(useridwithhash):
+        # if no cookie, send to signup
+        if not useridwithhash:
+            self.redirect('/blog/signup')
+
+        if useridwithhash and check_secure_val(useridwithhash):
             # if the userid/hash are correct in the cookie, get the username
             # by using the userid
             userid = useridwithhash.split('|')[0]
