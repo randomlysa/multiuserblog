@@ -214,7 +214,13 @@ class Login(Handler):
         if username and password and not valid_pw(username, password, h):
             params['e_username'] = "Incorrect username or password."
 
+        # valid login
         if valid_pw(username, password, h):
+            # set a cookie with the userid|hash of userid
+            self.response.headers.add_header(
+                'Set-Cookie', 'userid=%s' %
+                make_secure_val(str(user.key().id()))
+            )
             self.redirect('/blog/welcome')
         # anything else
         else:
