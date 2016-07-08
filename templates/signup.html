@@ -2,30 +2,27 @@
 {% block title %}Sign Up{% endblock %}
 {% block content %}
 
-<h1>Signup</h1>
-<br />
-<form action="/blog/signup" method="post">
-    <label>
-        Username:
-        <input type="text" name="username" value="{{username}}"><span>{{e_username}}</span>
-        <br>
-    </label>
-    <label>
-        Password:
-        <input type="password" name="password">
-        <br>
-    </label>
-    <label>
-        Verify Password:
-        <input type="password" name="verify"><span>{{e_password}}</span>
-        <br>
-    </label>
-    <label>
-        Email (optional):
-        <input type="text" name="email" value="{{email}}"><span>{{e_email}}</span>
-        <br>
-    </label>
-    <input type="submit">
-</form>
-
+<div class="content narrow centered">
+    <h1>Signup</h1>
+    <form action="/blog/signup" method="post">
+        <div>
+            <input type="text" name="username" placeholder="Username" value="{{username}}">
+            <span>{{e_username}}</span>
+        </div>
+        <div>
+            <input type="password" name="password" placeholder="Password">
+        </div>
+        <div>
+            <input type="password" name="verify" placeholder="Verify Password">
+            <span>{{e_password}}</span>
+        </div>
+        <div>
+            <input type="text" name="email" placeholder="Email" value="{{email}}">
+            <span>{{e_email}}</span>
+        </div>
+        <input type="submit">
+    </form>
+    <br>
+    Already have an account? <a href="/blog/login">Log in!</a>
+</div>
 {% endblock %}

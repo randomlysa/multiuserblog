@@ -4,21 +4,43 @@ https://coolors.co/app/b1740f-ffd07b-fdb833-296eb4-1789fc
 
 brown           #b1740f
 light brown     #ffd07b / background
-orange          fdb833
+orange          fdb833 / input border
 dark blue       296eb4 / header
 light blue      1789fc / links
 */
 
 img, embed, object, video { max-width: 100%;}
 
+/* general items */
+
 body {
     background-color: #ffd07b;
     font-family: 'Old Standard TT', serif;
+    font-size: 18pt;
 }
 
 a {
     color: #1789fc;
 }
+
+.narrow {
+    width: 50%;
+    margin: auto;
+    background-color: #a3aba6; /* temporary color */
+}
+
+.flex-container {
+    display: flex
+    flex-wrap: wrap;
+}
+
+.box {
+    height: 100px;
+    width: 100%;
+    background-color: #fff;
+}
+
+/* major sections */
 
 #header h1 {
     text-align: center;
@@ -31,4 +53,24 @@ a {
 #footer {
     margin-top: 25px;
     text-align: center;
+}
+
+/* form specific styles */
+
+.form-text {
+    width: 35%;
+    float: left;
+}
+
+input {
+    font-family: 'Old Standard TT', serif;
+    font-size: 18pt;
+    width: 35%;
+    margin: 7px;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  border-color: #1789fc;
+  outline-color: #296eb4;
+  outline-offset: 0;
 }
