@@ -192,18 +192,35 @@ class Login(Handler):
         username = self.request.get('username')
         password = self.request.get('password')
 
+        # return error messages / username back to the login page
+        params = {}
+
         # get info about user from database
         user = db.GqlQuery(
             "SELECT * FROM User WHERE username = :1 LIMIT 1", username
         ).get()
 
         # h is the hashed salted password plus the salt separated by a comma
-        h = user.password
+        if user:
+            h = user.password
+        else:
+            h = ','
+
+        # check error possibilities
+        if not username:
+            params['e_username'] = "Please enter a username."
+        if not password:
+            params['e_password'] = "Please enter a password."
+        if username and password and not valid_pw(username, password, h):
+            params['e_username'] = "Incorrect username or password."
 
         if valid_pw(username, password, h):
             self.redirect('/blog/welcome')
+        # anything else
         else:
-            self.render('login.html')
+            # return the username to the form
+            params['username'] = username
+            self.render('login.html', **params)
 
 
 
