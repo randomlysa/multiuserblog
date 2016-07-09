@@ -277,7 +277,10 @@ class CreateNewPost(Handler):
     params = dict.fromkeys(items, '')
 
     def get(self):
-        self.render('newpost.html', **CreateNewPost.params)
+        if self.user_logged_in():
+            self.render('newpost.html', **CreateNewPost.params)
+        else:
+            self.render('noaccess.html')
 
     def post(self):
         subject = self.request.get("subject")
