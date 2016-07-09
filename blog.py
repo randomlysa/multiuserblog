@@ -127,14 +127,9 @@ class RedirectToMainPage(Handler):
 class MainPage(Handler):
     '''Shows 10 newest posts.'''
     def get(self):
-        posts = db.GqlQuery(
-            "SELECT * FROM BlogPost ORDER BY postcreated DESC LIMIT 10"
-        )
+        posts = BlogPost.all().order('-postcreated').fetch(limit = 10)
 
-        # check if there's at least one post
-        check_posts = posts.get()
-
-        if check_posts:
+        if posts:
             self.render('allposts.html', posts=posts)
         else:
             self.render('noposts.html')
