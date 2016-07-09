@@ -46,6 +46,10 @@ a {
     float: left;
 }
 
+.error {
+    color: #a40000;
+}
+
 input {
     font-family: 'Old Standard TT', serif;
     font-size: 18pt;

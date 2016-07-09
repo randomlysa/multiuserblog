@@ -9,18 +9,18 @@
     <form action="/blog/signup" method="post">
         <div>
             <input type="text" name="username" placeholder="Username" value="{{username}}">
-            <span>{{e_username}}</span>
+            <div class="error">{{e_username}}</div>
         </div>
         <div>
             <input type="password" name="password" placeholder="Password">
         </div>
         <div>
             <input type="password" name="verify" placeholder="Verify Password">
-            <span>{{e_password}}</span>
+            <div class="error">{{e_password}}</div>
         </div>
         <div>
-            <input type="text" name="email" placeholder="Email" value="{{email}}">
-            <span>{{e_email}}</span>
+            <input type="text" name="email" placeholder="Email (Optional)" value="{{email}}">
+            <div class="error">{{e_email}}</div>
         </div>
         <input type="submit">
     </form>
