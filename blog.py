@@ -112,6 +112,13 @@ class BlogPost(db.Model):
     body = db.TextProperty(required=True)
     postcreated = db.DateTimeProperty(auto_now_add=True)
     postedited = db.DateTimeProperty(auto_now=True)
+
+    def render(self):
+        '''replace new lines '\n' with html new lines '<br>' '''
+        self.render_body = self.body.replace('\n', '<br>')
+        return self.render_body
+
+
 class User(db.Model):
     '''User info.'''
     username = db.StringProperty(required=True)
