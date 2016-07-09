@@ -312,8 +312,8 @@ class CreateNewPost(Handler):
 
 class ShowPost(Handler):
     '''Show a single post from the blog.'''
-    def get(self, postid):
-        postToShow = BlogPost.get_by_id(int(postid))
+    def get(self, permalink):
+        postToShow = BlogPost.all().filter('permalink =', permalink).get()
         self.render('showpost.html', post=postToShow)
 
 
