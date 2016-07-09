@@ -86,9 +86,11 @@ def valid_pw(name, pw, h):
 
 class BlogPost(db.Model):
     '''Subject and body for a blog post.'''
+    permalink = db.StringProperty(required=True)
     subject = db.StringProperty(required=True)
     body = db.TextProperty(required=True)
     postcreated = db.DateTimeProperty(auto_now_add=True)
+    postedited = db.DateTimeProperty(auto_now=True)
 
 
 class User(db.Model):
