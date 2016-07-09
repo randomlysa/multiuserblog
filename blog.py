@@ -112,6 +112,11 @@ class Handler(webapp2.RequestHandler):
         '''Takes render_str and sends to the browser'''
         self.write(self.render_str(template, **kw))
 
+    def user_logged_in(self):
+        '''Return true if user is logged in.'''
+        useridwithhash = self.request.cookies.get('userid')
+        return useridwithhash and check_secure_val(useridwithhash)
+
 
 class RedirectToMainPage(Handler):
     '''Redirect / to /blog'''
