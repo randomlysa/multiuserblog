@@ -59,6 +59,7 @@ input {
     text-align: center;
 }
 
+/* http://designmodo.com/create-css3-login-form/ */
 input[type=text]:focus, input[type=password]:focus {
   border-color: #1789fc;
   outline-color: #296eb4;
