@@ -275,7 +275,7 @@ class Welcome(Handler):
 
 class CreateNewPost(Handler):
     '''For adding new posts to the blog.'''
-    items = ('subject', 'body', 'error_subject', 'error_body')
+    items = ('permalink', 'subject', 'body', 'error_subject', 'error_body')
     # create dictionary from items and set all values to empty.
     params = dict.fromkeys(items, '')
 
@@ -288,9 +288,10 @@ class CreateNewPost(Handler):
     def post(self):
         subject = self.request.get("subject")
         body = self.request.get("content")
+        permalink = subject.replace(' ', '-')[0:50]
 
         if subject and body:
-            post = BlogPost(subject=subject, body=body)
+            post = BlogPost(permalink=permalink, subject=subject, body=body)
             post.put()
             # get new post and redirect to it
             redirect = post.key().id()
