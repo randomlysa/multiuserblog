@@ -79,6 +79,10 @@ input {
     font-size: 18pt;
     width: 100%;
     margin-bottom: 7px;
+}
+
+/* center input text only on login/signup, not when making posts */
+.login input, .signup input {
     text-align: center;
 }
 
