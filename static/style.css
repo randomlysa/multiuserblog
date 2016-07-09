@@ -26,6 +26,13 @@ a {
 
 /* major sections */
 
+#container {
+    width: 960px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #fff; /* for testing only */
+}
+
 .header h1 {
     text-align: center;
     color: #296eb4;
