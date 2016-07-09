@@ -3,9 +3,20 @@
 {% block content %}
 
 {% for post in posts %}
-    <h2>{{post.subject}}</h2>
-    {{post.body}}
-    <hr />
+    <h3>
+        <a href="/blog/{{post.permalink}}">
+        {{ post.subject }}
+        </a>
+    </h3>
+
+    <em>Posted {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}</em>
+
+    <br><br>
+
+    {{ post.render() | safe }}
+
+    <br><br>
+
 {% endfor %}
 
 {% endblock %}
