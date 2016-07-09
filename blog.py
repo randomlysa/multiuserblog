@@ -127,7 +127,7 @@ class RedirectToMainPage(Handler):
 class MainPage(Handler):
     '''Shows 10 newest posts.'''
     def get(self):
-        entries = db.GqlQuery(
+        posts = db.GqlQuery(
             "SELECT * FROM BlogPost ORDER BY postcreated DESC LIMIT 10"
         )
         logging.info(entries)
@@ -271,7 +271,7 @@ class Welcome(Handler):
 
 
 class CreateNewPost(Handler):
-    '''For adding new entries to the blog.'''
+    '''For adding new posts to the blog.'''
     items = ('subject', 'body', 'error_subject', 'error_body')
     # create dictionary from items and set all values to empty.
     params = dict.fromkeys(items, '')
