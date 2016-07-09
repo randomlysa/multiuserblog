@@ -1,3 +1,5 @@
+'''A multi user blog using Google's App Engine.'''
+
 import os
 
 import webapp2
@@ -94,6 +96,9 @@ class User(db.Model):
     username = db.StringProperty(required=True)
     password = db.StringProperty(required=True)
     email = db.EmailProperty(required=False)
+
+# website pages
+
 
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
@@ -255,7 +260,7 @@ class Welcome(Handler):
             userid = useridwithhash.split('|')[0]
             username = User.get_by_id(int(userid)).username
 
-            self.render('welcome.html', username = username)
+            self.render('welcome.html', username=username)
         else:
             self.redirect('/blog/signup')
 
