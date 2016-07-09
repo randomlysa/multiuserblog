@@ -311,7 +311,7 @@ class CreateNewPost(Handler):
         if not subject:
             CreateNewPost.params['error_subject'] = "A subject is required."
         if not content:
-            CreateNewPost.params['error_content'] = "A content is required."
+            CreateNewPost.params['error_content'] = "Content is required."
         if not subject or not content:
             # add subject and content only if there is an error
             CreateNewPost.params['subject'] = subject
