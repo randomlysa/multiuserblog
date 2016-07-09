@@ -43,7 +43,7 @@ a {
 
 /* major sections */
 
-#container {
+.container {
     max-width: 960px;
     margin: 0 auto;
     padding: 10px;
