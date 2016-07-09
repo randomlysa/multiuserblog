@@ -109,7 +109,7 @@ class BlogPost(db.Model):
     '''Subject and body for a blog post.'''
     permalink = db.StringProperty(required=True)
     subject = db.StringProperty(required=True)
-    body = db.TextProperty(required=True)
+    content = db.TextProperty(required=True)
     postcreated = db.DateTimeProperty(auto_now_add=True)
     postedited = db.DateTimeProperty(auto_now=True)
 
@@ -284,7 +284,7 @@ class Welcome(Handler):
 
 class CreateNewPost(Handler):
     '''For adding new posts to the blog.'''
-    items = ('permalink', 'subject', 'body', 'error_subject', 'error_body')
+    items = ('permalink', 'subject', 'content', 'error_subject', 'error_content')
     # create dictionary from items and set all values to empty.
     params = dict.fromkeys(items, '')
 
@@ -296,11 +296,11 @@ class CreateNewPost(Handler):
 
     def post(self):
         subject = self.request.get("subject")
-        body = self.request.get("content")
+        content = self.request.get("content")
         permalink = subject.replace(' ', '-')[0:50]
 
-        if subject and body:
-            post = BlogPost(permalink=permalink, subject=subject, body=body)
+        if subject and content:
+            post = BlogPost(permalink=permalink, subject=subject, content=content)
             post.put()
             # get new post and redirect to it
             redirect = post.key().id()
@@ -310,12 +310,12 @@ class CreateNewPost(Handler):
 
         if not subject:
             CreateNewPost.params['error_subject'] = "A subject is required."
-        if not body:
-            CreateNewPost.params['error_body'] = "A body is required."
-        if not subject or not body:
-            # add subject and body only if there is an error
+        if not content:
+            CreateNewPost.params['error_content'] = "A content is required."
+        if not subject or not content:
+            # add subject and content only if there is an error
             CreateNewPost.params['subject'] = subject
-            CreateNewPost.params['body'] = body
+            CreateNewPost.params['content'] = content
             self.render('newpost.html', **CreateNewPost.params)
 
 
