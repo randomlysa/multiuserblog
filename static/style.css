@@ -23,26 +23,10 @@ a {
     color: #1789fc;
 }
 
-.narrow {
-    width: 50%;
-    margin: auto;
-    background-color: #a3aba6; /* temporary color */
-}
-
-.flex-container {
-    display: flex
-    flex-wrap: wrap;
-}
-
-.box {
-    height: 100px;
-    width: 100%;
-    background-color: #fff;
-}
 
 /* major sections */
 
-#header h1 {
+.header h1 {
     text-align: center;
     color: #296eb4;
     font-family: 'Cinzel', serif;
@@ -50,7 +34,7 @@ a {
     letter-spacing: 4px;
 }
 
-#footer {
+.footer {
     margin-top: 25px;
     text-align: center;
 }
@@ -58,15 +42,15 @@ a {
 /* form specific styles */
 
 .form-text {
-    width: 35%;
+    width: 100%;
     float: left;
 }
 
 input {
     font-family: 'Old Standard TT', serif;
     font-size: 18pt;
-    width: 35%;
-    margin: 7px;
+    width: 100%;
+    margin-bottom: 7px;
 }
 
 input[type=text]:focus, input[type=password]:focus {
