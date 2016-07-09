@@ -144,6 +144,11 @@ class Signup(Handler):
         params = dict(username=username, email=email)
 
         # run checks on username, password, email. adds error messages
+        user = User.all().filter('username =', username).get()
+        if user:
+            params['e_username'] = "The username already exists!"
+            have_errors = True
+
         if not valid_username(username):
             params['e_username'] = "Invalid username!"
             have_errors = True
