@@ -2,21 +2,29 @@
 {% block title %}View Posts{% endblock %}
 {% block content %}
 
-<h1>Login</h1>
-<br />
-<form action="/blog/login" method="post">
-    <label>
-        Username:
-        <input type="text" name="username" value="{{username}}"><span>{{e_username}}</span>
-        <br>
-    </label>
-    <label>
-        Password:
-        <input type="password" name="password"><span>{{e_password}}</span>
-        <br>
-    </label>
-    <br />
-    <input type="submit">
-</form>
+<div class="col-sm-3 col-md-4"></div>
+
+<div class="col-sm-6 col-md-4">
+    <h1>Login</h1>
+
+    <form action="/blog/login" method="post">
+        <div>
+            <input type="text" name="username" placeholder="Username" value="{{username}}">
+            <div class="error">{{e_username}}</div>
+        </div>
+        <div>
+            <input type="password" name="password" placeholder="Password">
+            <div class="error">{{e_password}}</div>
+        </div>
+        <input type="submit">
+    </form>
+
+    <div class="text-center">
+        Don't have an account?<br>
+        <a href="/blog/signup">Sign up!</a>
+    </div>
+</div>
+
+<div class="col-sm-3 cold-md-4"></div>
 
 {% endblock %}
