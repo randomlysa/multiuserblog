@@ -11,6 +11,23 @@ light blue      1789fc / links
 
 img, embed, object, video { max-width: 100%;}
 
+/* adjustments to media queries */
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+
+}
+
+@media (min-width: 1200px) {
+    .header h1 {
+        font-size: 300%;
+    }
+}
+
+
 /* general items */
 
 body {
@@ -37,7 +54,6 @@ a {
     text-align: center;
     color: #296eb4;
     font-family: 'Cinzel', serif;
-    font-size: 300%;
     letter-spacing: 4px;
 }
 
