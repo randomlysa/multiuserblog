@@ -135,7 +135,7 @@ class MainPage(Handler):
         check_posts = posts.get()
 
         if check_posts:
-            self.render('posts.html', posts=posts)
+            self.render('allposts.html', posts=posts)
         else:
             self.render('noposts.html')
 
