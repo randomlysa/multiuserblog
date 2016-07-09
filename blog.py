@@ -130,8 +130,14 @@ class MainPage(Handler):
         posts = db.GqlQuery(
             "SELECT * FROM BlogPost ORDER BY postcreated DESC LIMIT 10"
         )
-        logging.info(entries)
-        self.render('posts.html', entries=entries)
+
+        # check if there's at least one post
+        check_posts = posts.get()
+
+        if check_posts:
+            self.render('posts.html', posts=posts)
+        else:
+            self.render('noposts.html')
 
 
 class Signup(Handler):
