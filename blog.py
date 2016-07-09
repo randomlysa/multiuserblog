@@ -81,25 +81,7 @@ def valid_pw(name, pw, h):
     salt = h.split(',')[1]
     return h == make_pw_hash(name, pw, salt)
 
-# db item(s)
-
-
-class BlogPost(db.Model):
-    '''Subject and body for a blog post.'''
-    permalink = db.StringProperty(required=True)
-    subject = db.StringProperty(required=True)
-    body = db.TextProperty(required=True)
-    postcreated = db.DateTimeProperty(auto_now_add=True)
-    postedited = db.DateTimeProperty(auto_now=True)
-
-
-class User(db.Model):
-    '''User info.'''
-    username = db.StringProperty(required=True)
-    password = db.StringProperty(required=True)
-    email = db.EmailProperty(required=False)
-
-# website pages
+# main handler
 
 
 class Handler(webapp2.RequestHandler):
@@ -118,6 +100,26 @@ class Handler(webapp2.RequestHandler):
         '''Return true if user is logged in.'''
         useridwithhash = self.request.cookies.get('userid')
         return useridwithhash and check_secure_val(useridwithhash)
+
+
+# db items
+
+
+class BlogPost(db.Model):
+    '''Subject and body for a blog post.'''
+    permalink = db.StringProperty(required=True)
+    subject = db.StringProperty(required=True)
+    body = db.TextProperty(required=True)
+    postcreated = db.DateTimeProperty(auto_now_add=True)
+    postedited = db.DateTimeProperty(auto_now=True)
+class User(db.Model):
+    '''User info.'''
+    username = db.StringProperty(required=True)
+    password = db.StringProperty(required=True)
+    email = db.EmailProperty(required=False)
+
+
+# blog pages
 
 
 class RedirectToMainPage(Handler):
