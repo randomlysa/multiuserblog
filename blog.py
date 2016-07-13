@@ -115,8 +115,8 @@ class BlogPost(db.Model):
 
     def render(self):
         '''replace new lines '\n' with html new lines '<br>' '''
-        self.render_body = self.body.replace('\n', '<br>')
-        return self.render_body
+        self.render_content = self.content.replace('\n', '<br>')
+        return self.render_content
 
 
 class User(db.Model):
