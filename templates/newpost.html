@@ -2,26 +2,23 @@
 {% block title %}New Post{% endblock %}
 {% block content %}
 
-<h2>New Blog Entry</h2>
-<form action="/blog/newpost" method="post">
-    <label>
-        Subject: <span class="error">{{error_subject}}</span><br>
-        <input type="text" name="subject" value="{{subject}}">
-    </label>
+  <div class="col-md-12 newpost">
 
-    <br>
+    <h2>new post</h2>
 
-    <label>
-        Body:  <span class="error">{{error_body}}</span><br>
-        <textarea name="content">{{body}}</textarea>
+    <form method="post">
 
-    </label>
+      <div>subject:</div>
+      <input type="text" name="subject" value="{{subject}}">
+      <div class="error">{{error_subject}}</div>
 
-    <br>
+      <div>content</div>
+      <textarea name="content">{{content}}</textarea>
+      <div class="error">{{error_content}}</div>
 
-    <label>
-        <input type="submit" value="post it!">
-    </label>
-</form>
+      <input type="submit">
+
+    </form>
+  </div>
 
 {% endblock %}
