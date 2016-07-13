@@ -303,10 +303,8 @@ class CreateNewPost(Handler):
             post = BlogPost(permalink=permalink, subject=subject, content=content)
             post.put()
             # get new post and redirect to it
-            redirect = post.key().id()
-            redirectint = int(redirect)
-            logging.info(redirect)
-            self.redirect("/blog/%s" % redirectint)
+            redirect = str(post.permalink)
+            self.redirect("/blog/%s" % redirect)
 
         if not subject:
             CreateNewPost.params['error_subject'] = "A subject is required."
