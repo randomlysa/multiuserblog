@@ -127,6 +127,10 @@ class User(db.Model):
     password = db.StringProperty(required=True)
     email = db.EmailProperty(required=False)
 
+    @classmethod
+    def by_id(cls, uid):
+        return User.get_by_id(uid)
+
 
 # blog pages
 
