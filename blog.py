@@ -13,7 +13,7 @@ import random  # to make a salt for passwords
 import string
 import hashlib
 
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(
@@ -104,16 +104,16 @@ class Handler(webapp2.RequestHandler):
         useridwithhash = self.request.cookies.get('userid')
         return useridwithhash and check_secure_val(useridwithhash)
 
-# db items
+# ndb items
 
 
-class BlogPost(db.Model):
+class BlogPost(ndb.Model):
     '''Subject and body for a blog post.'''
-    permalink = db.StringProperty(required=True)
-    subject = db.StringProperty(required=True)
-    content = db.TextProperty(required=True)
-    postcreated = db.DateTimeProperty(auto_now_add=True)
-    postedited = db.DateTimeProperty(auto_now=True)
+    permalink = ndb.StringProperty(required=True)
+    subject = ndb.StringProperty(required=True)
+    content = ndb.TextProperty(required=True)
+    postcreated = ndb.DateTimeProperty(auto_now_add=True)
+    postedited = ndb.DateTimeProperty(auto_now=True)
 
     def render(self):
         '''replace new lines '\n' with html new lines '<br>' '''
@@ -121,11 +121,11 @@ class BlogPost(db.Model):
         return self.render_content
 
 
-class User(db.Model):
+class User(ndb.Model):
     '''User info.'''
-    username = db.StringProperty(required=True)
-    password = db.StringProperty(required=True)
-    email = db.EmailProperty(required=False)
+    username = ndb.StringProperty(required=True)
+    password = ndb.StringProperty(required=True)
+    email = ndb.StringProperty(required=False)
 
     @classmethod
     def by_id(cls, uid):
@@ -144,7 +144,7 @@ class RedirectToMainPage(Handler):
 class MainPage(Handler):
     '''Shows 10 newest posts.'''
     def get(self):
-        posts = BlogPost.all().order('-postcreated').fetch(limit = 10)
+        posts = BlogPost.query().order(-BlogPost.postcreated).fetch(limit = 10)
 
         if posts:
             self.render('allposts.html', posts=posts)
@@ -198,13 +198,13 @@ class Signup(Handler):
             # if everything is correct, hash/salt the password
             password_salted = make_pw_hash(username, password, make_salt())
 
-            # info to send to the db to register the user
+            # info to send to the ndb to register the user
             reginfo = dict(username=username, password=password_salted)
             # add email to reginfo if it's not blank
             if email:
                 reginfo['email'] = email
 
-            # then add user to db, send to welcome page
+            # then add user to ndb, send to welcome page
             user = User(**reginfo)
             user.put()
             userid = str(user.key().id())
@@ -229,9 +229,7 @@ class Login(Handler):
         params = {}
 
         # get info about user from database
-        user = db.GqlQuery(
-            "SELECT * FROM User WHERE username = :1 LIMIT 1", username
-        ).get()
+        user = User.query(User.username==username).get()
 
         # h is the hashed salted password plus the salt separated by a comma
         if user:
@@ -247,12 +245,14 @@ class Login(Handler):
         if username and password and not valid_pw(username, password, h):
             params['e_username'] = "Incorrect username or password."
 
+        logging.info(user.key.integer_id())
+
         # valid login
         if valid_pw(username, password, h):
             # set a cookie with the userid|hash of userid
             self.response.headers.add_header(
                 'Set-Cookie', 'userid=%s' %
-                make_secure_val(str(user.key().id()))
+                make_secure_val(str(user.key.integer_id()))
             )
             self.redirect('/blog/welcome')
         # anything else
@@ -301,6 +301,7 @@ class CreateNewPost(Handler):
             self.render('noaccess.html')
 
     def post(self):
+        # post contents
         subject = self.request.get("subject")
         content = self.request.get("content")
         permalink = subject.replace(' ', '-')[0:50]
@@ -311,7 +312,7 @@ class CreateNewPost(Handler):
         logging.info(user)
 
         if subject and content:
-            post = BlogPost(permalink=permalink, subject=subject, content=content, parent=user)
+            post = BlogPost(permalink=permalink, subject=subject, content=content, parent=user.key)
             post.put()
             # get new post and redirect to it
             redirect = str(post.permalink)
