@@ -306,8 +306,7 @@ class CreateNewPost(Handler):
         content = self.request.get("content")
         permalink = subject.replace(' ', '-')[0:50]
 
-        # get user info, to set user as parent
-        ##
+        # get user info from cookie, to set user as parent
         user = User.by_id(int(self.get_userid()))
         logging.info(user)
 
