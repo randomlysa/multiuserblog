@@ -331,7 +331,13 @@ class CreateNewPost(Handler):
 class ShowPost(Handler):
     '''Show a single post from the blog.'''
     def get(self, permalink):
-        postToShow = BlogPost.all().filter('permalink =', permalink).get()
+        postToShow = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        # if the post isn't found, it's most likely a direct from /newpost,
+        # so try to get the post using an ancestor (strong consistency)
+        if not postToShow:
+            # get user info from cookie, to set user as ancestor
+            user = User.by_id(int(self.get_userid()))
+            postToShow = BlogPost.query(ancestor=user.key).filter(BlogPost.permalink == permalink).get()
         self.render('showpost.html', post=postToShow)
 
 
