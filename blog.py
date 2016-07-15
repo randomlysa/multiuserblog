@@ -338,7 +338,11 @@ class ShowPost(Handler):
             # get user info from cookie, to set user as ancestor
             user = User.by_id(int(self.get_userid()))
             postToShow = BlogPost.query(ancestor=user.key).filter(BlogPost.permalink == permalink).get()
-        self.render('showpost.html', post=postToShow)
+
+        if postToShow:
+            self.render('showpost.html', post=postToShow)
+        else:
+            self.render('postnotfound.html')
 
 
 app = webapp2.WSGIApplication([
