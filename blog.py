@@ -100,6 +100,9 @@ class Handler(webapp2.RequestHandler):
             kw['logged_in'] = 'yes'
         self.write(self.render_str(template, **kw))
 
+    def get_userid(self):
+        useridwithhash = self.request.cookies.get('userid')
+        return useridwithhash and check_secure_val(useridwithhash)
 
 # db items
 
@@ -288,7 +291,7 @@ class CreateNewPost(Handler):
     params = dict.fromkeys(items, '')
 
     def get(self):
-        if self.user_logged_in():
+        if self.get_userid():
             self.render('newpost.html', **CreateNewPost.params)
         else:
             self.render('noaccess.html')
