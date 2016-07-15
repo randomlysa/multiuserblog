@@ -305,8 +305,13 @@ class CreateNewPost(Handler):
         content = self.request.get("content")
         permalink = subject.replace(' ', '-')[0:50]
 
+        # get user info, to set user as parent
+        ##
+        user = User.by_id(int(self.get_userid()))
+        logging.info(user)
+
         if subject and content:
-            post = BlogPost(permalink=permalink, subject=subject, content=content)
+            post = BlogPost(permalink=permalink, subject=subject, content=content, parent=user)
             post.put()
             # get new post and redirect to it
             redirect = str(post.permalink)
