@@ -93,13 +93,12 @@ class Handler(webapp2.RequestHandler):
         return t.render(params)
 
     def render(self, template, **kw):
-        '''Takes render_str and sends to the browser'''
-        self.write(self.render_str(template, **kw))
-
-    def user_logged_in(self):
-        '''Return true if user is logged in.'''
+        '''Takes render_str and sends to the browser,
+        as well as if the user is logged in.'''
         useridwithhash = self.request.cookies.get('userid')
-        return useridwithhash and check_secure_val(useridwithhash)
+        if useridwithhash and check_secure_val(useridwithhash):
+            kw['logged_in'] = 'yes'
+        self.write(self.render_str(template, **kw))
 
 
 # db items
