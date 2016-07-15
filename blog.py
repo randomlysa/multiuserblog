@@ -172,7 +172,7 @@ class Signup(Handler):
         params = dict(username=username, email=email)
 
         # run checks on username, password, email. adds error messages
-        user = User.all().filter('username =', username).get()
+        user = User.query().filter(User.username==username).get()
         if user:
             params['e_username'] = "The username already exists!"
             have_errors = True
@@ -207,7 +207,7 @@ class Signup(Handler):
             # then add user to ndb, send to welcome page
             user = User(**reginfo)
             user.put()
-            userid = str(user.key().id())
+            userid = str(user.key().integer_id())
 
             # set a cookie with the userid|hash of userid
             self.response.headers.add_header(
