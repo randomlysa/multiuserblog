@@ -18,14 +18,18 @@
     <script src="/static/js/bootstrap.min.js"></script>
 
     <div class="container">
-
         <div class="row">
             <div class="col-md-12 header">
+            {% if not logged_in %}
                 <a href="/blog/signup">Signup</a> |
                 <a href="/blog/login">Login</a> |
+            {% endif %}
                 <a href="/blog">Home</a> |
+            {% if logged_in %}
                 <a href="/blog/newpost">Post something!</a> |
                 <a href="/blog/logout">Log out</a> |
+            {% endif %}
+
                 <a href="/blog"><h1>Udacity Blog</h1></a>
             </div>
         </div>
