@@ -340,6 +340,7 @@ class ShowPost(Handler):
             postToShow = BlogPost.query(ancestor=user.key).filter(BlogPost.permalink == permalink).get()
 
         if postToShow:
+            logging.info(postToShow)
             self.render('showpost.html', post=postToShow)
         else:
             self.render('postnotfound.html')
