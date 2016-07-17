@@ -333,9 +333,12 @@ class ShowPost(Handler):
         postOwnerID = User.query(User.key == postToShow.key.parent()).get().key.id()
 
         owner = False
-        # check if post owner userid == logged in userid
-        if postOwnerID == int(self.get_userid()):
-            owner = True
+        # check if user is logged in, otherwise
+        # int(self.get_userid()) will cause an error
+        if self.get_userid():
+            # check if post owner userid == logged in userid
+            if postOwnerID == int(self.get_userid()):
+                owner = True
 
         # if the post isn't found, it's most likely a direct from /newpost,
         # so try to get the post using an ancestor (strong consistency)
