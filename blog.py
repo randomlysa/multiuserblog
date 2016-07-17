@@ -301,12 +301,15 @@ class CreateNewPost(Handler):
         subject = self.request.get("subject")
         content = self.request.get("content")
         permalink = subject.replace(' ', '-')[0:50]
+        # letters and numbers only, plus dashes instead of spaces
+        # http://stackoverflow.com/a/5843560
+        permalink_alnum = ''.join(e for e in permalink if e.isalnum() or e == '-')
 
         # get user info from cookie, to set user as parent
         user = User.by_id(int(self.get_userid()))
 
         if subject and content:
-            post = BlogPost(permalink=permalink, subject=subject, content=content, parent=user.key)
+            post = BlogPost(permalink=permalink_alnum, subject=subject, content=content, parent=user.key)
             post.put()
             # get new post and redirect to it
             redirect = str(post.permalink)
