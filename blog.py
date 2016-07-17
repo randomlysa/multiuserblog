@@ -298,7 +298,7 @@ class CreateNewPost(Handler):
 
     def post(self):
         # post contents
-        subject = self.request.get("subject")
+        subject = self.request.get("subject")[0:150]
         content = self.request.get("content")
         permalink = subject.replace(' ', '-')[0:50]
         # letters and numbers only, plus dashes instead of spaces
