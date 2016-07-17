@@ -275,20 +275,13 @@ class Logout(Handler):
 class Welcome(Handler):
     '''Redirected here on a successful signup.'''
     def get(self):
-        useridwithhash = self.request.cookies.get('userid')
         # if no cookie, send to signup
-        if not useridwithhash:
+        if not self.get_userid():
             self.redirect('/blog/signup')
-
-        if useridwithhash and check_secure_val(useridwithhash):
-            # if the userid/hash are correct in the cookie, get the username
-            # by using the userid
-            userid = useridwithhash.split('|')[0]
-            username = User.get_by_id(int(userid)).username
-
-            self.render('welcome.html', username=username)
+        # if the userid/hash are correct in the cookie, send to welcome page.
         else:
-            self.redirect('/blog/signup')
+            self.render('welcome.html')
+
 
 
 class CreateNewPost(Handler):
