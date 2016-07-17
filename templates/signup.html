@@ -2,10 +2,12 @@
 {% block title %}Sign Up{% endblock %}
 {% block content %}
 
-<div class="col-sm-3 col-md-4"></div>
+<div class="col-md-3"></div>
 
-<div class="col-sm-6 col-md-4 signup">
-    <h1>Signup</h1>
+<div class="col-md-6 signup">
+    <p class="text-centered">
+        <h1>Signup | <a href="/blog/login">Login</a></h1>
+    </p>
     <form action="/blog/signup" method="post">
         <div>
             <input type="text" name="username" placeholder="Username" value="{{username}}">
@@ -25,9 +27,8 @@
         <input type="submit">
     </form>
     <br>
-    Already have an account?<br >
-    <a href="/blog/login">Log in!</a>
+    Already have an account? <a href="/blog/login">Log in!</a>
 </div>
 
-<div class="col-sm-3 cold-md-4"></div>
+<div class="col-md-3"></div>
 {% endblock %}
