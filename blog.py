@@ -266,10 +266,10 @@ class Login(Handler):
 
 
 class Logout(Handler):
-    '''Set cookie userid to empty and redirect to /blog/signup.'''
+    '''Set cookie userid to empty and redirect to /blog/login.'''
     def get(self):
         self.response.headers.add_header('Set-Cookie', 'userid=')
-        self.redirect('/blog/signup')
+        self.redirect('/blog/login')
 
 
 class Welcome(Handler):
