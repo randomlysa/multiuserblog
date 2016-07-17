@@ -21,6 +21,33 @@ jinja_env = jinja2.Environment(
     autoescape=True
 )
 
+# ndb items
+
+
+class BlogPost(ndb.Model):
+    '''Subject and body for a blog post.'''
+    permalink = ndb.StringProperty(required=True)
+    subject = ndb.StringProperty(required=True)
+    content = ndb.TextProperty(required=True)
+    postcreated = ndb.DateTimeProperty(auto_now_add=True)
+    postedited = ndb.DateTimeProperty(auto_now=True)
+
+    def render(self):
+        '''replace new lines '\n' with html new lines '<br>' '''
+        self.render_content = self.content.replace('\n', '<br>')
+        return self.render_content
+
+
+class User(ndb.Model):
+    '''User info.'''
+    username = ndb.StringProperty(required=True)
+    password = ndb.StringProperty(required=True)
+    email = ndb.StringProperty(required=False)
+
+    @classmethod
+    def by_id(cls, uid):
+        return User.get_by_id(uid)
+
 # set regular expressions for checking username, password, email
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 PASSWORD_RE = re.compile(r"^.{3,20}$")
@@ -104,32 +131,6 @@ class Handler(webapp2.RequestHandler):
         useridwithhash = self.request.cookies.get('userid')
         return useridwithhash and check_secure_val(useridwithhash)
 
-# ndb items
-
-
-class BlogPost(ndb.Model):
-    '''Subject and body for a blog post.'''
-    permalink = ndb.StringProperty(required=True)
-    subject = ndb.StringProperty(required=True)
-    content = ndb.TextProperty(required=True)
-    postcreated = ndb.DateTimeProperty(auto_now_add=True)
-    postedited = ndb.DateTimeProperty(auto_now=True)
-
-    def render(self):
-        '''replace new lines '\n' with html new lines '<br>' '''
-        self.render_content = self.content.replace('\n', '<br>')
-        return self.render_content
-
-
-class User(ndb.Model):
-    '''User info.'''
-    username = ndb.StringProperty(required=True)
-    password = ndb.StringProperty(required=True)
-    email = ndb.StringProperty(required=False)
-
-    @classmethod
-    def by_id(cls, uid):
-        return User.get_by_id(uid)
 
 
 # blog pages
