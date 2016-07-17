@@ -330,6 +330,13 @@ class ShowPost(Handler):
     '''Show a single post from the blog.'''
     def get(self, permalink):
         postToShow = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postOwnerID = User.query(User.key == postToShow.key.parent()).get().key.id()
+
+        owner = False
+        # check if post owner userid == logged in userid
+        if postOwnerID == int(self.get_userid()):
+            owner = True
+
         # if the post isn't found, it's most likely a direct from /newpost,
         # so try to get the post using an ancestor (strong consistency)
         if not postToShow:
@@ -338,8 +345,7 @@ class ShowPost(Handler):
             postToShow = BlogPost.query(ancestor=user.key).filter(BlogPost.permalink == permalink).get()
 
         if postToShow:
-            logging.info(postToShow)
-            self.render('showpost.html', post=postToShow)
+            self.render('showpost.html', post=postToShow, owner=owner)
         else:
             self.render('postnotfound.html')
 
