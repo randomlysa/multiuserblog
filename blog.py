@@ -129,8 +129,7 @@ class Handler(webapp2.RequestHandler):
         return User.get_by_id(userid).username
 
     def render(self, template, **kw):
-        '''Takes render_str and sends to the browser,
-        as well as if the user is logged in.'''
+        '''Send render_str, if the user is logged in, and username to the browser.'''
         if self.get_userid():
             kw['logged_in'] = 'yes'
             kw['username'] = self.get_username()
