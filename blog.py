@@ -304,7 +304,6 @@ class CreateNewPost(Handler):
 
         # get user info from cookie, to set user as parent
         user = User.by_id(int(self.get_userid()))
-        logging.info(user)
 
         if subject and content:
             post = BlogPost(permalink=permalink, subject=subject, content=content, parent=user.key)
