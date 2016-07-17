@@ -119,14 +119,6 @@ class Handler(webapp2.RequestHandler):
         t = jinja_env.get_template(template)
         return t.render(params)
 
-    def render(self, template, **kw):
-        '''Takes render_str and sends to the browser,
-        as well as if the user is logged in.'''
-        useridwithhash = self.request.cookies.get('userid')
-        if useridwithhash and check_secure_val(useridwithhash):
-            kw['logged_in'] = 'yes'
-        self.write(self.render_str(template, **kw))
-
     def get_userid(self):
         useridwithhash = self.request.cookies.get('userid')
         return useridwithhash and check_secure_val(useridwithhash)
@@ -136,6 +128,13 @@ class Handler(webapp2.RequestHandler):
         userid = int(self.get_userid())
         return User.get_by_id(userid).username
 
+    def render(self, template, **kw):
+        '''Takes render_str and sends to the browser,
+        as well as if the user is logged in.'''
+        if self.get_userid():
+            kw['logged_in'] = 'yes'
+            kw['username'] = self.get_username()
+        self.write(self.render_str(template, **kw))
 
 # blog pages
 
