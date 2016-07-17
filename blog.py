@@ -131,6 +131,10 @@ class Handler(webapp2.RequestHandler):
         useridwithhash = self.request.cookies.get('userid')
         return useridwithhash and check_secure_val(useridwithhash)
 
+    def get_username(self):
+        '''Returns the username from a cookie userid.'''
+        userid = int(self.get_userid())
+        return User.get_by_id(userid).username
 
 
 # blog pages
