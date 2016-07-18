@@ -361,5 +361,5 @@ app = webapp2.WSGIApplication([
     ('/blog/logout', Logout),
     ('/blog/welcome', Welcome),
     ('/blog/newpost', CreateNewPost),
-    ('/blog/(.*)', ShowPost),
+    ('/blog/([\w\d-]+)', ShowPost),
 ], debug=True)
