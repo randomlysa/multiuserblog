@@ -1,35 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% block head %}
-    <link href='https://fonts.googleapis.com/css?family=Cinzel:400,900|Old+Standard+TT:400,400italic' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
+    <title>{% block title %}{% endblock %} - My Blog</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Cinzel:400,900|Old+Standard+TT:400,400italic' rel='stylesheet' type='text/css'>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/style.css" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{% endblock %} - My Blog</title>
-    {% endblock %}
+
 </head>
 <body>
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/static/js/bootstrap.min.js"></script>
 
     <div class="container">
         <div class="row">
             <div class="col-md-12 header">
-            {% if not logged_in %}
-                <a href="/blog/signup">Signup</a> |
-                <a href="/blog/login">Login</a> |
-            {% endif %}
-                <a href="/blog">Home</a> |
-            {% if logged_in %}
-                <a href="/blog/newpost">Post something!</a> |
-                <a href="/blog/logout">Log out</a> |
-                Logged in as {{ username }}
-            {% endif %}
+                {% if not logged_in %}
+                    <a href="/blog/signup">Signup</a> |
+                    <a href="/blog/login">Login</a> |
+                {% endif %}
+                    <a href="/blog">Home</a> |
+                {% if logged_in %}
+                    <a href="/blog/newpost">Post something!</a> |
+                    <a href="/blog/logout">Log out</a> |
+                    Logged in as {{ username }}
+                {% endif %}
 
                 <h1><a href="/blog">Udacity Blog</a></h1>
             </div>
@@ -51,6 +49,11 @@
         </div>
 
     </div><!-- div container -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/static/js/bootstrap.min.js"></script>
 
 </body>
 </html>
