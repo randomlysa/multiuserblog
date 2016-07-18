@@ -11,7 +11,7 @@
 <em>Posted {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}</em>
 
 {% if owner %}
-    | <a href="/blog/edit/{{post.permalink}}">edit post</a>
+    | <a href="/blog/{{post.permalink}}/edit">edit post</a>
 {% endif %}
 
 <br><br>
