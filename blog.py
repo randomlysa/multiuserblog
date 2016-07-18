@@ -353,6 +353,27 @@ class ShowPost(Handler):
             self.render('postnotfound.html')
 
 
+class EditPost(Handler):
+    '''Edit a single post from the blog.'''
+    def get(self, permalink):
+        logging.info(permalink)
+        postToEdit = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postOwnerID = User.query(User.key == postToEdit.key.parent()).get().key.id()
+
+        owner = False
+        # check if user is logged in, otherwise
+        # int(self.get_userid()) will cause an error
+        if self.get_userid():
+            # check if post owner userid == logged in userid
+            if postOwnerID == int(self.get_userid()):
+                owner = True
+
+        if postToEdit:
+            self.render('editpost.html', post=postToEdit, owner=owner)
+        else:
+            self.render('postnotfound.html')
+
+
 app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
     ('/blog', MainPage),
@@ -362,4 +383,6 @@ app = webapp2.WSGIApplication([
     ('/blog/welcome', Welcome),
     ('/blog/newpost', CreateNewPost),
     ('/blog/([\w\d-]+)', ShowPost),
+    ('/blog/([\w\d-]+)/edit', EditPost),
+
 ], debug=True)
