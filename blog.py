@@ -340,7 +340,7 @@ class ShowPost(Handler):
             if postOwnerID == int(self.get_userid()):
                 owner = True
 
-        # if the post isn't found, it's most likely a direct from /newpost,
+        # if the post isn't found, it's most likely a redirect from /newpost,
         # so try to get the post using an ancestor (strong consistency)
         if not postToShow:
             # get user info from cookie, to set user as ancestor
