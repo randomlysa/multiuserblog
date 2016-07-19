@@ -41,6 +41,18 @@
 
         {% endif %}
 
+        {# if NOT userid (not logged in) OR logged in userid DOES equal post.parent.id, do NOT allow to like #}
+        {% if not userid or userid|int() == post.key.parent().id()|int() %}
+
+            {# if the post has at least one like, show star, otherwise, show star-empty #}
+            {% if post.likes %}
+                <span class="glyphicon glyphicon-star"></span>
+            {% endif %}
+            {% if not post.likes %}
+                <span class="glyphicon glyphicon-star-empty"></span>
+            {% endif %}
+        {% endif %}
+
         <br><br>
 
         {{ post.render() | safe }}
