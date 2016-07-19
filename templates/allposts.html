@@ -3,28 +3,29 @@
 {% block content %}
 
 {% for post in posts %}
-        <a href="/blog/{{post.permalink}}">
-        {{ post.subject }}
-        </a>
+    <div class="post">
         <h2>
+            <a href="/blog/{{post.permalink}}">
+            {{ post.subject }}
+            </a>
         </h2>
 
-    <em>
-    {% for user in users %}
-        {% if post.key.parent().id() == user.key.id() %}
-            Posted by {{ user.username }}
-        {% endif %}
+        <em>
+        {% for user in users %}
+            {% if post.key.parent().id() == user.key.id() %}
+                Posted by {{ user.username }}
+            {% endif %}
 
-    {% endfor %}
+        {% endfor %}
 
-    on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
-    </em>
+        on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
+        </em>
 
-    <br><br>
+        <br><br>
 
-    {{ post.render() | safe }}
+        {{ post.render() | safe }}
+    </div>
 
-    <br><br>
 
 {% endfor %}
 
