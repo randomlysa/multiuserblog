@@ -12,6 +12,9 @@
 
         <em>
         {% for user in users %}
+            {# post.key.parent().id() = id of parent of this post (user id) #}
+            {# user.key.id() = id of user, going through a list of all users. not very efficient. #}
+
             {% if post.key.parent().id() == user.key.id() %}
                 Posted by {{ user.username }}
             {% endif %}
