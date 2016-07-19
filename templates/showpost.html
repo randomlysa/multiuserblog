@@ -13,7 +13,8 @@
 <em>Posted {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}</em>
 
 {% if owner %}
-    | <a href="/blog/{{post.permalink}}/edit">edit post</a>
+    <a class="btn btn-primary" href="/blog/{{post.permalink}}/edit">edit post</a>
+    <a class="btn btn-danger" href="/blog/{{post.permalink}}/delete">delete post</a>
 {% endif %}
 
 <br><br>
