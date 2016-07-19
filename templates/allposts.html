@@ -11,8 +11,6 @@
         </h2>
 
         <em>
-        {# get username of the poster #}
-
         Posted by {{ post.get_owner(post.key.parent().id()) }}
 
         on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
