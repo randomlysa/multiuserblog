@@ -31,6 +31,7 @@ class BlogPost(ndb.Model):
     content = ndb.TextProperty(required=True)
     postcreated = ndb.DateTimeProperty(auto_now_add=True)
     postedited = ndb.DateTimeProperty(auto_now=True)
+    likes = ndb.TextProperty() # list of users who like this post
 
     def render(self):
         '''replace new lines '\n' with html new lines '<br>' '''
