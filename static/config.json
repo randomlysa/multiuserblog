@@ -387,6 +387,7 @@
     "forms.less",
     "buttons.less",
     "responsive-utilities.less",
+    "glyphicons.less",
     "navs.less",
     "navbar.less",
     "pagination.less",
@@ -407,5 +408,5 @@
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=e0c60b86e6ca42147e5aa880a5f08ba0"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=1636e6a7baf40c6cfaba5a750e3d23cb"
 }
