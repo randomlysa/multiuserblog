@@ -370,10 +370,10 @@ class EditPost(Handler):
             if postOwnerID == int(self.get_userid()):
                 owner = True
 
-        if postToEdit:
+        if postToEdit and owner:
             self.render('editpost.html', post=postToEdit, owner=owner)
         else:
-            self.render('postnotfound.html')
+            self.render('editposterror.html')
 
     def post(self, permalink):
         postToEdit = BlogPost.query().filter(BlogPost.permalink == permalink).get()
