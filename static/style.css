@@ -7,6 +7,11 @@ light brown     #ffd07b / background
 orange          fdb833 / input border
 dark blue       296eb4 / header
 light blue      1789fc / links
+
+fonts:
+Cinzel - .header h1; h3
+Old Standard - body, input
+
 */
 
 img, embed, object, video { max-width: 100%;}
