@@ -26,7 +26,6 @@
 
         {# if logged in userid does not equal post.parent.id #}
         {% if userid|int() != post.key.parent().id()|int() %}
-        dis
             <a href="#"><span class="glyphicon glyphicon-star-empty"></span></a>
         {% endif %}
 
