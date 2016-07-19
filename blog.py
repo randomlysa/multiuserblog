@@ -345,6 +345,7 @@ class ShowPost(Handler):
     '''Show a single post from the blog.'''
     def get(self, permalink):
         postToShow = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        comments = Comment.query(ancestor=postToShow.key).fetch()
 
         # if the post isn't found, it's most likely a redirect from /newpost,
         # so try to get the post using an ancestor (strong consistency)
@@ -366,7 +367,7 @@ class ShowPost(Handler):
 
 
         if postToShow:
-            self.render('showpost.html', post=postToShow, owner=owner)
+            self.render('showpost.html', post=postToShow, comments=comments, owner=owner)
         else:
             self.render('postnotfound.html')
 

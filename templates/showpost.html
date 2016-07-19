@@ -35,4 +35,12 @@ on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
     </form>
 {% endif %}
 
+{% for comment in comments %}
+    Comment by {{ comment.username }}
+    on {{ comment.commentcreated.strftime("%A, %B %d, %Y @ %H:%I") }}:
+    <br>
+    {{ comment.content }}
+    <hr>
+{% endfor %}
+
 {% endblock %}
