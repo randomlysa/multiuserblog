@@ -48,6 +48,9 @@
         <br><br>
 
         {{ post.render() | safe }}
+
+        <br><br>
+        <em>Comments: {{ post.count_comments(post.key) }}</em>
     </div>
 
 

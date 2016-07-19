@@ -52,6 +52,10 @@ class BlogPost(ndb.Model):
         '''Return post owner from post.key.parent().id().'''
         return User.get_by_id(userid).username
 
+    def count_comments(self, postid):
+        return Comment.query(ancestor=postid).count()
+
+
 class Comment(ndb.Model):
     parent = BlogPost.key
     username = ndb.StringProperty(required=True)
