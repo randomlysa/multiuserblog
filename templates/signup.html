@@ -10,7 +10,7 @@
     </p>
     <form action="/blog/signup" method="post">
         <div>
-            <input type="text" name="username" placeholder="Username" value="{{username}}">
+            <input type="text" name="username" placeholder="Username" value="{% if username != None %}{{username}}{% endif %}">
             <div class="error">{{e_username}}</div>
         </div>
         <div>
