@@ -148,9 +148,9 @@ class MainPage(Handler):
     '''Shows 10 newest posts.'''
     def get(self):
         posts = BlogPost.query().order(-BlogPost.postcreated).fetch(limit = 10)
-
+        users = User.query().fetch()
         if posts:
-            self.render('allposts.html', posts=posts)
+            self.render('allposts.html', posts=posts, users=users)
         else:
             self.render('noposts.html')
 

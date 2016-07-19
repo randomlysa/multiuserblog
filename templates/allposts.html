@@ -9,7 +9,16 @@
         </a>
     </h3>
 
-    <em>Posted {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}</em>
+    <em>
+    {% for user in users %}
+        {% if post.key.parent().id() == user.key.id() %}
+            Posted by {{ user.username }}
+        {% endif %}
+
+    {% endfor %}
+
+    on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
+    </em>
 
     <br><br>
 
