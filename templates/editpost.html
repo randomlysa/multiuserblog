@@ -17,7 +17,14 @@
       <textarea name="content">{{post.content}}</textarea>
       <div class="error">{{error_content}}</div>
 
-      <input type="submit">
+      <div class="row">
+        <div class="col-md-6">
+          <input class="btn btn-lg btn-success" type="submit" value="Edit Post">
+        </div>
+        <div class="col-md-6">
+          <a class="btn btn-lg btn-primary" href="/blog/{{post.permalink}}">Cancel/Return to Post</a>
+        </div>
+      </div>
 
     </form>
   </div>
