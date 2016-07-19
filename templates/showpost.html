@@ -2,11 +2,11 @@
 {% block title %}Permalink{% endblock %}
 {% block content %}
 
-<h3>
+<h2>
     <a href="/blog/{{post.permalink}}">
     {{ post.subject }}
     </a>
-</h3>
+</h2>
 
 <em>Posted {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}</em>
 

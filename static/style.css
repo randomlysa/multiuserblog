@@ -57,6 +57,12 @@ a {
     letter-spacing: 4px;
 }
 
+h2 {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 4px;
+    font-weight: 900;
+}
+
 .footer {
     margin-top: 25px;
     text-align: center;
