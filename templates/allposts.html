@@ -24,8 +24,10 @@
         on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
         </em>
 
-        {# if logged in userid does not equal post.parent.id #}
-        {% if userid|int() != post.key.parent().id()|int() %}
+        {# link to like a post #}
+
+        {# if userid AND logged in userid does NOT equal post.parent.id, allow to like #}
+        {% if userid|int() and userid|int() != post.key.parent().id()|int() %}
 
             {% if userid in post.likes %}
                 {# logged in user has liked this post #}
