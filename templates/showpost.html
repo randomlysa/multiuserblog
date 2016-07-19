@@ -10,6 +10,9 @@
     </a>
 </h2>
 
+{{ post.get_owner(post.key.parent().id()) }}
+
+
 <em>Posted {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}</em>
 
 {% if owner %}
