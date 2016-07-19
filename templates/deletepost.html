@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}
+  Delete Post -
+  {{ post.subject }}
+{% endblock %}
+{% block content %}
+
+  <div class="col-md-12">
+
+    <h2>delete post!</h2>
+    {{ post.title }}
+
+    <form method="post">
+
+      <div>subject:</div>
+      {{post.subject}}
+
+      <div>content</div>
+      {{post.content}}
+
+
+      <div class="row">
+        <div class="col-md-6">
+          <input class="btn btn-lg btn-danger btn-input" type="submit" value="Delete Post">
+        </div>
+        <div class="col-md-6">
+          <a class="btn btn-lg btn-primary btn-input" href="/blog/{{post.permalink}}">Cancel/Return to Post</a>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+{% endblock %}

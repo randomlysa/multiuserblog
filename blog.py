@@ -388,6 +388,34 @@ class EditPost(Handler):
         self.redirect('/blog/%s' % permalink)
 
 
+class DeletePost(Handler):
+    '''Delete a single post from the blog.'''
+    def get(self, permalink):
+        postToDelete = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postOwnerID = User.query(User.key == postToDelete.key.parent()).get().key.id()
+
+        owner = False
+        # check if user is logged in, otherwise
+        # int(self.get_userid()) will cause an error
+        if self.get_userid():
+            # check if post owner userid == logged in userid
+            if postOwnerID == int(self.get_userid()):
+                owner = True
+
+        if postToDelete and owner:
+            self.render('deletepost.html', post=postToDelete, owner=owner)
+        else:
+            self.render('posterror.html')
+
+    def post(self, permalink):
+        postToDelete = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postOwnerID = User.query(User.key == postToDelete.key.parent()).get().key.id()
+        postToDelete.key.delete()
+        # redirect to main page.
+        # the post still will show up until a refresh. need to fix this
+        self.redirect('/blog')
+
+
 app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
     ('/blog', MainPage),
@@ -398,5 +426,6 @@ app = webapp2.WSGIApplication([
     ('/blog/newpost', CreatePost),
     ('/blog/([\w\d-]+)', ShowPost),
     ('/blog/([\w\d-]+)/edit', EditPost),
+    ('/blog/([\w\d-]+)/delete', DeletePost),
 
 ], debug=True)
