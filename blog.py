@@ -48,6 +48,10 @@ class BlogPost(ndb.Model):
         self.render_content = self.content.replace('\n', '<br>')
         return self.render_content
 
+    def get_owner(self, userid):
+        '''Return post owner from post.key.parent().id().'''
+        return User.get_by_id(userid).username
+
 class Comment(ndb.Model):
     parent = BlogPost.key
     user = ndb.StringProperty(required=True)
