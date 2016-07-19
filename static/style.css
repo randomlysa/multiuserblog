@@ -97,6 +97,11 @@ input {
     margin-bottom: 7px;
 }
 
+/* set .btn to same width as input */
+.btn {
+    width: 100%;
+}
+
 /* center input text only on login/signup, not when making posts */
 .login input, .signup input {
     text-align: center;
