@@ -133,7 +133,8 @@ class Handler(webapp2.RequestHandler):
         '''Send render_str, if the user is logged in, and username to the browser.'''
         if self.get_userid():
             kw['logged_in'] = 'yes'
-            kw['username'] = self.get_username()
+            kw['username'] = self.get_username() # name of logged in user
+            kw['userid'] = self.get_userid() # userid of logged in user
         self.write(self.render_str(template, **kw))
 
 # blog pages
