@@ -26,7 +26,17 @@
 
         {# if logged in userid does not equal post.parent.id #}
         {% if userid|int() != post.key.parent().id()|int() %}
-            <a href="#"><span class="glyphicon glyphicon-star-empty"></span></a>
+
+            {% if userid in post.likes %}
+                {# logged in user has liked this post #}
+                <a href="/blog/{{post.permalink}}/unlike"><span class="glyphicon glyphicon-star"></span></a>
+            {% endif %}
+
+            {% if userid not in post.likes %}
+                {# logged in user has NOT liked this post #}
+                <a href="/blog/{{post.permalink}}/like"><span class="glyphicon glyphicon-star-empty"></span></a>
+            {% endif %}
+
         {% endif %}
 
         <br><br>

@@ -31,7 +31,7 @@ class BlogPost(ndb.Model):
     content = ndb.TextProperty(required=True)
     postcreated = ndb.DateTimeProperty(auto_now_add=True)
     postedited = ndb.DateTimeProperty(auto_now=True)
-    likes = ndb.TextProperty() # list of users who like this post
+    likes = ndb.TextProperty(repeated=True) # list of users who like this post
 
     def render(self):
         '''replace new lines '\n' with html new lines '<br>' '''
@@ -419,6 +419,53 @@ class DeletePost(Handler):
         self.redirect('/blog')
 
 
+class LikePost(Handler):
+    '''Like a single post from the blog.'''
+    def get(self, permalink):
+        postToLike = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postOwnerID = User.query(User.key == postToLike.key.parent()).get().key.id()
+
+        owner = False
+        # check if user is logged in, otherwise
+        # int(self.get_userid()) will cause an error
+        if self.get_userid():
+            # check if post owner userid == logged in userid
+            if postOwnerID == int(self.get_userid()):
+                owner = True
+
+        if postToLike and not owner:
+            # append userid to the db
+            postToLike.likes.append(str(self.get_userid()))
+            postToLike.put()
+            self.redirect('/blog')
+        else:
+            # make some kind of error handler later
+            self.render('editposterror.html')
+
+
+class UnlikePost(Handler):
+    '''Unlike a single post from the blog.'''
+    def get(self, permalink):
+        postToUnlike = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postOwnerID = User.query(User.key == postToUnlike.key.parent()).get().key.id()
+
+        owner = False
+        # check if user is logged in, otherwise
+        # int(self.get_userid()) will cause an error
+        if self.get_userid():
+            # check if post owner userid == logged in userid
+            if postOwnerID == int(self.get_userid()):
+                owner = True
+
+        if postToUnlike and not owner:
+            # remove userid from 'likes'
+            postToUnlike.likes.remove(str(self.get_userid()))
+            postToUnlike.put()
+            self.redirect('/blog')
+        else:
+            # make some kind of error handler later
+            self.render('editposterror.html')
+
 app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
     ('/blog', MainPage),
@@ -430,5 +477,7 @@ app = webapp2.WSGIApplication([
     ('/blog/([\w\d-]+)', ShowPost),
     ('/blog/([\w\d-]+)/edit', EditPost),
     ('/blog/([\w\d-]+)/delete', DeletePost),
+    ('/blog/([\w\d-]+)/like', LikePost),
+    ('/blog/([\w\d-]+)/unlike', UnlikePost),
 
 ], debug=True)
