@@ -23,6 +23,16 @@ jinja_env = jinja2.Environment(
 
 # ndb items
 
+class User(ndb.Model):
+    '''User info.'''
+    username = ndb.StringProperty(required=True)
+    password = ndb.StringProperty(required=True)
+    email = ndb.StringProperty(required=False)
+
+    @classmethod
+    def by_id(cls, uid):
+        return User.get_by_id(uid)
+
 
 class BlogPost(ndb.Model):
     '''Subject and body for a blog post.'''
@@ -38,16 +48,13 @@ class BlogPost(ndb.Model):
         self.render_content = self.content.replace('\n', '<br>')
         return self.render_content
 
+class Comment(ndb.Model):
+    parent = BlogPost.key
+    user = ndb.StringProperty(required=True)
+    content = ndb.TextProperty(required=True)
+    commontcreated = ndb.DateTimeProperty(auto_now_add=True)
+    commontedited = ndb.DateTimeProperty(auto_now=True)
 
-class User(ndb.Model):
-    '''User info.'''
-    username = ndb.StringProperty(required=True)
-    password = ndb.StringProperty(required=True)
-    email = ndb.StringProperty(required=False)
-
-    @classmethod
-    def by_id(cls, uid):
-        return User.get_by_id(uid)
 
 # set regular expressions for checking username, password, email
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
@@ -356,6 +363,19 @@ class ShowPost(Handler):
             self.render('showpost.html', post=postToShow, owner=owner)
         else:
             self.render('postnotfound.html')
+
+    def post(self, permalink):
+        '''Add a comment to ndb.'''
+        post = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        comment = self.request.get('comment')
+        comment = Comment(
+            parent=post.key,
+            user=self.get_username(),
+            content=comment
+            )
+        comment.put()
+        self.redirect('/blog/%s' % permalink)
+
 
 
 class EditPost(Handler):

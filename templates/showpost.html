@@ -23,4 +23,12 @@
 
 <br><br>
 
+{% if username %} {# user is logged in #}
+    <form method="post">
+        Comments?<br>
+        <textarea name="comment"></textarea>
+        <input type="submit" value="add comment!">
+    </form>
+{% endif %}
+
 {% endblock %}
