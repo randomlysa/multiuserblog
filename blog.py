@@ -405,7 +405,8 @@ class DeletePost(Handler):
         if postToDelete and owner:
             self.render('deletepost.html', post=postToDelete, owner=owner)
         else:
-            self.render('posterror.html')
+            # make some kind of error handler later
+            self.render('editposterror.html')
 
     def post(self, permalink):
         postToDelete = BlogPost.query().filter(BlogPost.permalink == permalink).get()
