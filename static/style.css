@@ -90,16 +90,11 @@ h2 {
     color: #a40000;
 }
 
-input {
+input, .btn-input {
     font-family: 'Old Standard TT', serif;
     font-size: 18pt;
     width: 100%;
     margin-bottom: 7px;
-}
-
-/* set .btn to same width as input */
-.btn {
-    width: 100%;
 }
 
 /* center input text only on login/signup, not when making posts */
