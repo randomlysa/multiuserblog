@@ -359,7 +359,6 @@ class ShowPost(Handler):
 class EditPost(Handler):
     '''Edit a single post from the blog.'''
     def get(self, permalink):
-        logging.info(permalink)
         postToEdit = BlogPost.query().filter(BlogPost.permalink == permalink).get()
         postOwnerID = User.query(User.key == postToEdit.key.parent()).get().key.id()
 
