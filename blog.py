@@ -284,7 +284,7 @@ class Welcome(Handler):
 
 
 
-class CreateNewPost(Handler):
+class CreatePost(Handler):
     '''For adding new posts to the blog.'''
     items = ('permalink', 'subject', 'content', 'error_subject', 'error_content')
     # create dictionary from items and set all values to empty.
@@ -292,7 +292,7 @@ class CreateNewPost(Handler):
 
     def get(self):
         if self.get_userid():
-            self.render('newpost.html', **CreateNewPost.params)
+            self.render('newpost.html', **CreatePost.params)
         else:
             self.render('noaccess.html')
 
@@ -316,14 +316,14 @@ class CreateNewPost(Handler):
             self.redirect("/blog/%s" % redirect)
 
         if not subject:
-            CreateNewPost.params['error_subject'] = "A subject is required."
+            CreatePost.params['error_subject'] = "A subject is required."
         if not content:
-            CreateNewPost.params['error_content'] = "Content is required."
+            CreatePost.params['error_content'] = "Content is required."
         if not subject or not content:
             # add subject and content only if there is an error
-            CreateNewPost.params['subject'] = subject
-            CreateNewPost.params['content'] = content
-            self.render('newpost.html', **CreateNewPost.params)
+            CreatePost.params['subject'] = subject
+            CreatePost.params['content'] = content
+            self.render('newpost.html', **CreatePost.params)
 
 
 class ShowPost(Handler):
@@ -395,7 +395,7 @@ app = webapp2.WSGIApplication([
     ('/blog/login', Login),
     ('/blog/logout', Logout),
     ('/blog/welcome', Welcome),
-    ('/blog/newpost', CreateNewPost),
+    ('/blog/newpost', CreatePost),
     ('/blog/([\w\d-]+)', ShowPost),
     ('/blog/([\w\d-]+)/edit', EditPost),
 
