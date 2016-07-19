@@ -54,10 +54,10 @@ class BlogPost(ndb.Model):
 
 class Comment(ndb.Model):
     parent = BlogPost.key
-    user = ndb.StringProperty(required=True)
+    username = ndb.StringProperty(required=True)
     content = ndb.TextProperty(required=True)
-    commontcreated = ndb.DateTimeProperty(auto_now_add=True)
-    commontedited = ndb.DateTimeProperty(auto_now=True)
+    commentcreated = ndb.DateTimeProperty(auto_now_add=True)
+    commentedited = ndb.DateTimeProperty(auto_now=True)
 
 
 # set regular expressions for checking username, password, email
@@ -376,7 +376,7 @@ class ShowPost(Handler):
         comment = self.request.get('comment')
         comment = Comment(
             parent=post.key,
-            user=self.get_username(),
+            username=self.get_username(),
             content=comment
             )
         comment.put()
