@@ -182,6 +182,9 @@ class Signup(Handler):
     def post(self):
         # get info from post
         username = self.request.get('username')
+        # username is set to None when not logged in.
+        # username_return is the value returned to the html form
+        username_return  = username
         password = self.request.get('password')
         verify = self.request.get('verify')
         email = self.request.get('email')
@@ -192,7 +195,7 @@ class Signup(Handler):
         have_errors = False
 
         # things to return to the script when there are errors
-        params = dict(username=username, email=email)
+        params = dict(username_return=username_return, email=email)
 
         # run checks on username, password, email. adds error messages
         user = User.query().filter(User.username==username).get()
