@@ -228,13 +228,17 @@ class Signup(Handler):
             # then add user to ndb, send to welcome page
             user = User(**reginfo)
             user.put()
-            userid = str(user.key().integer_id())
+            '''
+            # userid = str(user.key().integer_id())
+            userid = user.id()
+            logging.info(userid)
 
             # set a cookie with the userid|hash of userid
             self.response.headers.add_header(
                 'Set-Cookie', 'userid=%s' % make_secure_val(userid)
             )
-            self.redirect('/blog/welcome')
+            '''
+            self.redirect('/blog/login')
 
 
 class Login(Handler):
