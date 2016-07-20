@@ -210,8 +210,10 @@ class Signup(Handler):
         if not valid_password(password):
             params['e_password'] = "Invalid password!"
             have_errors = True
-        elif password != verify:
+
+        if password != verify:
             params['e_password'] = "Passwords do not match!"
+            have_errors = True
 
         if not valid_email(email):
             params['e_email'] = "Invalid email!"
