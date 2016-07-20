@@ -149,6 +149,7 @@ class Handler(webapp2.RequestHandler):
         # default to None otherwise main page doesn't work when not logged in
         kw['username'] = None
         kw['userid'] = None
+        # if a cookie with userid is set, user is logged in
         if self.get_userid():
             kw['logged_in'] = 'yes'
             kw['username'] = self.get_username() # name of logged in user
