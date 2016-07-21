@@ -460,25 +460,36 @@ class DeletePost(Handler):
         self.redirect('/blog')
 
 
-class LikePost(Handler):
+class ToggleLikePost(Handler):
     '''Like a single post from the blog.'''
     def get(self, permalink):
-        postToLike = BlogPost.query().filter(BlogPost.permalink == permalink).get()
-        postOwnerID = User.query(User.key == postToLike.key.parent()).get().key.id()
+        postOwnerKey = BlogPost.query(BlogPost.permalink == permalink).get().key.parent()
+        postToToggleLike = BlogPost.query(ancestor=postOwnerKey).filter(BlogPost.permalink == permalink).get()
+        # postOwnerID = User.query(User.key == postToLike.key.parent()).get().key.id()
 
         owner = False
         # check if user is logged in, otherwise
         # int(self.get_userid()) will cause an error
         if self.get_userid():
             # check if post owner userid == logged in userid
-            if postOwnerID == int(self.get_userid()):
+            if postOwnerKey.id() == int(self.get_userid()):
                 owner = True
 
-        if postToLike and not owner:
-            # append userid to the db
-            postToLike.likes.append(str(self.get_userid()))
-            postToLike.put()
-            self.redirect('/blog')
+        # make sure we found the post and that the logged in user is not the post owner
+        if postToToggleLike and not owner:
+            # if the user has liked the post, unlike it
+            if self.get_userid() in postToToggleLike.likes:
+                postToToggleLike.likes.remove(str(self.get_userid()))
+                postToToggleLike.put()
+                self.redirect('/blog')
+
+            # if the user has NOT liked the post, like it
+            else:
+                # append userid to the db
+                postToToggleLike.likes.append(str(self.get_userid()))
+                postToToggleLike.put()
+                self.redirect('/blog')
+        # post not found or user is owner
         else:
             # make some kind of error handler later
             self.render('editposterror.html')
@@ -518,7 +529,7 @@ app = webapp2.WSGIApplication([
     ('/blog/([\w\d-]+)', ShowPost),
     ('/blog/([\w\d-]+)/edit', EditPost),
     ('/blog/([\w\d-]+)/delete', DeletePost),
-    ('/blog/([\w\d-]+)/like', LikePost),
+    ('/blog/([\w\d-]+)/like', ToggleLikePost),
     ('/blog/([\w\d-]+)/unlike', UnlikePost),
 
 ], debug=True)
