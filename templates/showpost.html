@@ -21,6 +21,38 @@ on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
     <a class="btn btn-danger" href="/blog/{{post.permalink}}/delete">delete post</a>
 {% endif %}
 
+{# link to like a post #}
+
+    {# if userid AND logged in userid does NOT equal post.parent.id, allow to like #}
+    {% if userid|int() and userid|int() != post.key.parent().id()|int() %}
+
+        {% if userid in post.likes %}
+            {# logged in user has liked this post #}
+            <a href="/blog/{{post.permalink}}/like"><span class="glyphicon glyphicon-star"></span></a>
+        {% endif %}
+
+        {% if userid not in post.likes %}
+            {# logged in user has NOT liked this post #}
+            <a href="/blog/{{post.permalink}}/like"><span class="glyphicon glyphicon-star-empty"></span></a>
+        {% endif %}
+
+    {% endif %}
+
+    {# if NOT userid (not logged in) OR logged in userid DOES equal post.parent.id, do NOT allow to like #}
+    {% if not userid or userid|int() == post.key.parent().id()|int() %}
+
+        {# if the post has at least one like, show star, otherwise, show star-empty #}
+        {% if post.likes %}
+            <span class="glyphicon glyphicon-star"></span>
+        {% endif %}
+        {% if not post.likes %}
+            <span class="glyphicon glyphicon-star-empty"></span>
+        {% endif %}
+    {% endif %}
+
+{#  END link to like a post #}
+
+
 <br><br>
 
 {{ post.render() | safe }}
