@@ -57,7 +57,6 @@ class BlogPost(ndb.Model):
 
 
 class Comment(ndb.Model):
-    parent = BlogPost.key
     username = ndb.StringProperty(required=True)
     content = ndb.TextProperty(required=True)
     commentcreated = ndb.DateTimeProperty(auto_now_add=True)
