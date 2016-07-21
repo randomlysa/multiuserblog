@@ -23,7 +23,7 @@
 
             {% if userid in post.likes %}
                 {# logged in user has liked this post #}
-                <a href="/blog/{{post.permalink}}/unlike"><span class="glyphicon glyphicon-star"></span></a>
+                <a href="/blog/{{post.permalink}}/like"><span class="glyphicon glyphicon-star"></span></a>
             {% endif %}
 
             {% if userid not in post.likes %}
