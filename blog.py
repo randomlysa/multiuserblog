@@ -481,14 +481,14 @@ class ToggleLikePost(Handler):
             if self.get_userid() in postToToggleLike.likes:
                 postToToggleLike.likes.remove(str(self.get_userid()))
                 postToToggleLike.put()
-                self.redirect('/blog')
+                self.redirect('/blog/%s/update' % permalink)
 
             # if the user has NOT liked the post, like it
             else:
                 # append userid to the db
                 postToToggleLike.likes.append(str(self.get_userid()))
                 postToToggleLike.put()
-                self.redirect('/blog')
+                self.redirect('/blog/%s/update' % permalink)
         # post not found or user is owner
         else:
             # make some kind of error handler later
