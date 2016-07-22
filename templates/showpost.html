@@ -5,6 +5,10 @@
 {% block content %}
 
 <script language="Javascript" type="text/javascript">
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
 /* http://www.codecoffee.com/articles/ajax.html */
 <!--
 
@@ -125,14 +129,15 @@ on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
 
 {% if username %} {# user is logged in #}
     <form method="post">
-        Comments?<br>
+        Add a comment:</a><br />
         <textarea name="comment"></textarea>
         <input type="submit" value="add comment!">
     </form>
 {% endif %}
 
+{% if comments %}<h2>Comments</h2>{% endif %}
 {% for comment in comments %}
-    Comment by {{ comment.username }}
+    Comment by <strong>{{ comment.username }}</strong>
     on {{ comment.commentcreated.strftime("%A, %B %d, %Y @ %H:%I") }}:
     <br>
     {{ comment.content }}
