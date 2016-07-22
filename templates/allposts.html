@@ -106,10 +106,10 @@ function processResponse(permalink) {
 
             {# if the post has at least one like, show star, otherwise, show star-empty #}
             {% if post.likes %}
-                <span class="glyphicon glyphicon-star"></span>
+                <a href="javascript:alert('You cannot like your own post!')"><span class="glyphicon glyphicon-star"></span></a>
             {% endif %}
             {% if not post.likes %}
-                <span class="glyphicon glyphicon-star-empty"></span>
+                <a href="javascript:alert('You cannot like your own post!')"><span class="glyphicon glyphicon-star-empty"></span></a>
             {% endif %}
         {% endif %}
 
