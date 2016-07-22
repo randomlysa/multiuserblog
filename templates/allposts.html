@@ -2,6 +2,70 @@
 {% block title %}View Posts{% endblock %}
 {% block content %}
 
+<script language="Javascript" type="text/javascript">
+/* http://www.codecoffee.com/articles/ajax.html */
+<!--
+
+function createRequestObject() {
+    var tmpXmlHttpObject;
+
+    //depending on what the browser supports, use the right way to create the XMLHttpRequest object
+    if (window.XMLHttpRequest) {
+        // Mozilla, Safari would use this method ...
+        tmpXmlHttpObject = new XMLHttpRequest();
+
+    } else if (window.ActiveXObject) {
+        // IE would use this method ...
+        tmpXmlHttpObject = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    return tmpXmlHttpObject;
+}
+
+//call the above function to create the XMLHttpRequest object
+var http = createRequestObject();
+
+function makeGetRequest(permalink) {
+    // make a connection to the server. specifying that you intend to make a GET request
+    // to the server. Specify the URL/permalink to send
+    http.open('get', '/blog/' + permalink + '/like');
+
+    // assign a handler for the response
+    // http://www.w3schools.com/ajax/ajax_xmlhttprequest_onreadystatechange.asp
+    http.onreadystatechange = function () {
+        if (http.readyState == 4 && http.status == 200) {
+            // since allposts will usually  more than one blog post to like/unlike,
+            // use the permalink as the class name to specify on which post to toggle the star
+            processResponse(permalink);
+        };
+    };
+
+    //actually send the request to the server
+    http.send(null);
+}
+
+function processResponse(permalink) {
+    //check if the response has been received from the server
+    if(http.readyState == 4){
+
+        //read and assign the response from the server
+        var response = http.responseText;
+
+        if (response == 'unliked') {
+        // toggle the span.permalink class
+            $( "span." + permalink ).addClass('glyphicon-star-empty')
+            $( "span." + permalink ).removeClass('glyphicon-star')
+        }
+        if (response == 'liked') {
+        // toggle the span.permalink class
+            $( "span." + permalink ).addClass('glyphicon-star')
+            $( "span." + permalink ).removeClass('glyphicon-star-empty')
+        }
+    }
+}
+-->
+</script>
+
 {% for post in posts %}
     <div class="post">
         <h2>
@@ -23,12 +87,16 @@
 
             {% if userid in post.likes %}
                 {# logged in user has liked this post #}
-                <a href="/blog/{{post.permalink}}/like"><span class="glyphicon glyphicon-star"></span></a>
+                <a href="javascript:makeGetRequest('{{post.permalink}}')">
+                <!-- <a href="/blog/{{post.permalink}}/like"> -->
+                <span class="{{post.permalink}} glyphicon glyphicon-star"></span></a>
             {% endif %}
 
             {% if userid not in post.likes %}
                 {# logged in user has NOT liked this post #}
-                <a href="/blog/{{post.permalink}}/like"><span class="glyphicon glyphicon-star-empty"></span></a>
+                <a href="javascript:makeGetRequest('{{post.permalink}}')">
+                <!-- <a href="/blog/{{post.permalink}}/like"> -->
+                <span class="{{post.permalink}} glyphicon glyphicon-star-empty"></span></a>
             {% endif %}
 
         {% endif %}
