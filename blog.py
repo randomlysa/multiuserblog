@@ -153,6 +153,15 @@ class Handler(webapp2.RequestHandler):
         '''Get permalink, return post.'''
         return BlogPost.query().filter(BlogPost.permalink == permalink).get()
 
+    def check_owner(self, itemownerid):
+        '''Check if logged in user owns any item by itemownerid'''
+        # check if user is logged in, otherwise
+        # int(self.get_userid()) will cause an error
+        if self.get_userid():
+            # check if itemownerid == logged in userid
+            if itemownerid == int(self.get_userid()):
+                return True
+
     def render(self, template, **kw):
         '''Send render_str, if the user is logged in, and
         username to the browser.'''
