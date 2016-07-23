@@ -452,6 +452,9 @@ class EditPost(Handler):
 
             self.redirect('/blog/%s' % permalink)
 
+        else:
+            self.render('editposterror.html')
+
 
 class DeletePost(Handler):
     '''Delete a single post from the blog.'''
