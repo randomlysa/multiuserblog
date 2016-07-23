@@ -536,6 +536,34 @@ class EditComment(Handler):
         self.redirect('/blog/%s' % self.request.get('permalink'))
 
 
+class DeleteComment(Handler):
+    '''Edit a comment from a post.'''
+    def get(self, commentid):
+        comment = ndb.Key(urlsafe=commentid).get()
+        '''
+        break down a comment key into tuple of flattened kind and id values
+        used to get permalink of comment post to cancel editing
+        [0]         [1]
+        'User',     6401906452725760,
+        [2]         [3]
+        'BlogPost', 5627850266771456,
+        [4]         [5]
+        'Comment', 6753750173614080)
+        '''
+        permalinkKey = comment.key.flat()
+        permalink = BlogPost.get_by_id(permalinkKey[3], parent=ndb.Key('User', permalinkKey[1])).permalink
+
+        self.render('deletecomment.html', comment=comment, permalink=permalink)
+
+    def post(self, commentid):
+        '''Save updated comment to ndb.'''
+        comment = ndb.Key(urlsafe=commentid).get()
+        comment.key.delete()
+
+        self.redirect('/blog/%s' % self.request.get('permalink'))
+
+
+
 
 app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
@@ -550,5 +578,6 @@ app = webapp2.WSGIApplication([
     ('/blog/([\w\d-]+)/delete', DeletePost),
     ('/blog/([\w\d-]+)/like', ToggleLikePost),
     ('/blog/comment/([\w\d-]+)/edit', EditComment),
+    ('/blog/comment/([\w\d-]+)/delete', DeleteComment),
 
 ], debug=True)

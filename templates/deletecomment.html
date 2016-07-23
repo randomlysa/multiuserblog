@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Delete Comment{% endblock %}
+{% block content %}
+
+  <div class="col-md-12 newpost">
+
+    <h2>delete comment</h2>
+
+    <form method="post">
+      <div>comment:</div>
+      <br >
+      <input type="hidden" value="{{permalink}}" name="permalink">
+
+      {{comment.content}}
+
+      <br><br>
+      <div class="error">{{error_content}}</div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <input class="btn btn-lg btn-success btn-input" type="submit" value="Delete Comment">
+        </div>
+        <div class="col-md-6">
+          <a class="btn btn-lg btn-primary btn-input" href="/blog/{{permalink}}">Cancel/Return to Post</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}
