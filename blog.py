@@ -428,20 +428,9 @@ class EditPost(Handler):
     '''Edit a single post from the blog.'''
     def get(self, permalink):
         postToEdit = self.get_post_by_permalink(permalink)
-        postOwnerID = User.query(
-            User.key == postToEdit.key.parent()
-        ).get().key.id()
 
-        owner = False
-        # check if user is logged in, otherwise
-        # int(self.get_userid()) will cause an error
-        if self.get_userid():
-            # check if post owner userid == logged in userid
-            if postOwnerID == int(self.get_userid()):
-                owner = True
-
-        if postToEdit and owner:
-            self.render('editpost.html', post=postToEdit, owner=owner)
+        if postToEdit and self.check_owner(postToEdit.key.parent().id()):
+            self.render('editpost.html', post=postToEdit, owner=True)
         else:
             self.render('editposterror.html')
 
