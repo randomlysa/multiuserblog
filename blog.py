@@ -395,26 +395,15 @@ class ShowPost(Handler):
             postToShow = BlogPost.query(ancestor=user.key).\
                 filter(BlogPost.permalink == permalink).get()
 
-        # now that we have postToShow, get the owner information and comments
-        postOwnerID = User.query(
-            User.key == postToShow.key.parent()
-        ).get().key.id()
         comments = Comment.query(ancestor=postToShow.key)\
             .order(Comment.commentcreated).fetch()
-
-        owner = False
-        # check if user is logged in, otherwise
-        # int(self.get_userid()) will cause an error
-        if self.get_userid():
-            # check if post owner userid == logged in userid
-            if postOwnerID == int(self.get_userid()):
-                owner = True
 
         if postToShow:
             self.render('showpost.html',
                         post=postToShow,
                         comments=comments,
-                        owner=owner)
+                        # if owner = True, shows links for edit/delete
+                        owner=self.check_owner(postToShow.key.parent().id()))
         else:
             self.render('postnotfound.html')
 
