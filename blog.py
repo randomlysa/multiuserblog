@@ -425,10 +425,12 @@ class EditPost(Handler):
 
         postToEdit.subject = self.request.get('subject')
         postToEdit.content = self.request.get('content')
-
         postToEdit.put()
 
-        # new post won't show up because I'm not using strong consistency
+        # get the post using strong consistency before redirecting back to /blog/permalink
+        user = User.by_id(int(self.get_userid()))
+        force_update = BlogPost.query(ancestor=user.key).filter(BlogPost.permalink == permalink).get()
+
         self.redirect('/blog/%s' % permalink)
 
 
