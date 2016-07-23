@@ -135,6 +135,13 @@ on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
 {% for comment in comments %}
     Comment by <strong>{{ comment.username }}</strong>
     on {{ comment.commentcreated.strftime("%A, %B %d, %Y @ %H:%I") }}:
+
+    {# if username is comment owner #}
+    {% if userid|int() and username|string() == comment.username|string() %}
+        <a class="btn btn-primary" href="/blog/comment/{{ comment.urlsafekey(comment.key) }}/edit">edit</a>
+        <a class="btn btn-danger" href="/blog/comment/{{ comment.urlsafekey(comment.key) }}/delete">delete</a>
+    {% endif %}
+
     <br>
     {{ comment.content }}
     <hr>
