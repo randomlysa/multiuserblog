@@ -76,11 +76,6 @@ Posted by {{ post.get_owner(post.key.parent().id()) }}
 on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
 </em>
 
-{% if owner %}
-    <a class="btn btn-primary" href="/blog/{{post.permalink}}/edit">edit post</a>
-    <a class="btn btn-danger" href="/blog/{{post.permalink}}/delete">delete post</a>
-{% endif %}
-
 {# link to like a post #}
 
     {# if userid AND logged in userid does NOT equal post.parent.id, allow to like #}
@@ -115,6 +110,11 @@ on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
     {% endif %}
 
 {#  END link to like a post #}
+
+{% if owner %}
+    <a class="btn btn-primary" href="/blog/{{post.permalink}}/edit">edit post</a>
+    <a class="btn btn-danger" href="/blog/{{post.permalink}}/delete">delete post</a>
+{% endif %}
 
 
 <br><br>
