@@ -419,6 +419,7 @@ class EditPost(Handler):
             self.render('editposterror.html')
 
     def post(self, permalink):
+        '''Save edit, then get using strong consistency to force update.'''
         postToEdit = BlogPost.query().filter(BlogPost.permalink == permalink).get()
         postOwnerID = User.query(User.key == postToEdit.key.parent()).get().key.id()
 
