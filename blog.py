@@ -476,34 +476,30 @@ class DeletePost(Handler):
     '''Delete a single post from the blog.'''
     def get(self, permalink):
         postToDelete = self.get_post_by_permalink(permalink)
-        postOwnerID = User.query(
-            User.key == postToDelete.key.parent()
-        ).get().key.id()
 
-        owner = False
-        # check if user is logged in, otherwise
-        # int(self.get_userid()) will cause an error
-        if self.get_userid():
-            # check if post owner userid == logged in userid
-            if postOwnerID == int(self.get_userid()):
-                owner = True
-
-        if postToDelete and owner:
-            self.render('deletepost.html', post=postToDelete, owner=owner)
+        # check that the post exists and userid = postownerid
+        if postToDelete and self.check_owner(postToDelete.key.parent().id()):
+            self.render('deletepost.html', post=postToDelete, owner=True)
         else:
             # make some kind of error handler later
             self.render('editposterror.html')
 
     def post(self, permalink):
         postToDelete = self.get_post_by_permalink(permalink)
-        postOwnerID = User.query(
-            User.key == postToDelete.key.parent()
-        ).get().key.id()
-        postToDelete.key.delete()
-        # redirect to main page.
-        # the post still will show up until a refresh. need to fix this
-        self.redirect('/blog')
 
+        # check that the post exists and userid = postownerid
+        if postToDelete and self.check_owner(postToDelete.key.parent().id()):
+            postToDelete.key.delete()
+
+            # get random post using strong consistency so deleted post
+            # is not displayed on refresh.
+            postToShow = BlogPost.query(ancestor=postToDelete.key.parent()).\
+                    filter(BlogPost.permalink == permalink).get()
+            # redirect to main page.
+            self.redirect('/blog')
+        # there's an error
+        else:
+            self.render('editposterror.html')
 
 class ToggleLikePost(Handler):
     '''Like a single post from the blog.'''
