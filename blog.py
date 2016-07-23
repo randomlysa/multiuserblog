@@ -437,21 +437,20 @@ class EditPost(Handler):
     def post(self, permalink):
         '''Save edit, then get using strong consistency to force update.'''
         postToEdit = self.get_post_by_permalink(permalink)
-        postOwnerID = User.query(
-            User.key == postToEdit.key.parent()
-        ).get().key.id()
 
-        postToEdit.subject = self.request.get('subject')
-        postToEdit.content = self.request.get('content')
-        postToEdit.put()
+        if postToEdit and self.check_owner(postToEdit.key.parent().id()):
 
-        # get the post using strong consistency before redirecting
-        # back to /blog/permalink
-        user = User.by_id(int(self.get_userid()))
-        force_update = BlogPost.query(ancestor=user.key).\
-            filter(BlogPost.permalink == permalink).get()
+            postToEdit.subject = self.request.get('subject')
+            postToEdit.content = self.request.get('content')
+            postToEdit.put()
 
-        self.redirect('/blog/%s' % permalink)
+            # get the post using strong consistency before redirecting
+            # back to /blog/permalink
+            user = User.by_id(int(self.get_userid()))
+            force_update = BlogPost.query(ancestor=user.key).\
+                filter(BlogPost.permalink == permalink).get()
+
+            self.redirect('/blog/%s' % permalink)
 
 
 class DeletePost(Handler):
