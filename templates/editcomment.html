@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Edit Comment{% endblock %}
+{% block content %}
+
+  <div class="col-md-12 newpost">
+
+    <h2>edit comment</h2>
+
+    <form method="post">
+      <div>content</div>
+      <input type="hidden" value="{{permalink}}" name="permalink">
+      <textarea name="content">{{comment.content}}</textarea>
+      <div class="error">{{error_content}}</div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <input class="btn btn-lg btn-success btn-input" type="submit" value="Update Comment">
+        </div>
+        <div class="col-md-6">
+          <a class="btn btn-lg btn-primary btn-input" href="/blog/{{permalink}}">Cancel/Return to Post</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}
