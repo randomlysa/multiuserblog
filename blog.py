@@ -53,6 +53,7 @@ class BlogPost(ndb.Model):
         return User.get_by_id(userid).username
 
     def count_comments(self, postid):
+        '''Returns the number of comments on a post.'''
         return Comment.query(ancestor=postid).count()
 
 
