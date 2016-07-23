@@ -544,7 +544,7 @@ class DeleteComment(Handler):
         break down a comment key into tuple of flattened kind and id values
         used to get permalink of comment post to cancel editing
         [0]         [1]
-        'User',     6401906452725760,
+        'User',     6401906452725760, -- this is the user that owns the post!
         [2]         [3]
         'BlogPost', 5627850266771456,
         [4]         [5]
