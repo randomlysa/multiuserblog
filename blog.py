@@ -494,17 +494,9 @@ class ToggleLikePost(Handler):
         postToToggleLike = BlogPost.query(ancestor=postOwnerKey).\
             filter(BlogPost.permalink == permalink).get()
 
-        owner = False
-        # check if user is logged in, otherwise
-        # int(self.get_userid()) will cause an error
-        if self.get_userid():
-            # check if post owner userid == logged in userid
-            if postOwnerKey.id() == int(self.get_userid()):
-                owner = True
-
         # make sure we found the post and that the logged in user is not
         # the post owner since the owner cannot like his own post
-        if postToToggleLike and not owner:
+        if postToToggleLike and not self.check_owner(postOwnerKey.id()):
             # if the user has liked the post, unlike it
             if self.get_userid() in postToToggleLike.likes:
                 postToToggleLike.likes.remove(str(self.get_userid()))
