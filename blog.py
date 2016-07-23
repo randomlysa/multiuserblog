@@ -23,6 +23,7 @@ jinja_env = jinja2.Environment(
 
 # ndb items
 
+
 class User(ndb.Model):
     '''User info.'''
     username = ndb.StringProperty(required=True)
@@ -113,7 +114,7 @@ def make_salt():
     return ''.join(random.choice(string.letters) for x in xrange(5))
 
 
-def make_pw_hash(name, pw, salt = None):
+def make_pw_hash(name, pw, salt=None):
     '''make a salt for a new name, pw or
     verify if a passed in name, pw, salt is correct'''
     if not salt:
@@ -153,15 +154,16 @@ class Handler(webapp2.RequestHandler):
         return BlogPost.query().filter(BlogPost.permalink == permalink).get()
 
     def render(self, template, **kw):
-        '''Send render_str, if the user is logged in, and username to the browser.'''
+        '''Send render_str, if the user is logged in, and
+        username to the browser.'''
         # default to None otherwise main page doesn't work when not logged in
         kw['username'] = None
         kw['userid'] = None
         # if a cookie with userid is set, user is logged in
         if self.get_userid():
             kw['logged_in'] = 'yes'
-            kw['username'] = self.get_username() # name of logged in user
-            kw['userid'] = self.get_userid() # userid of logged in user
+            kw['username'] = self.get_username()  # name of logged in user
+            kw['userid'] = self.get_userid()  # userid of logged in user
         self.write(self.render_str(template, **kw))
 
 # blog pages
@@ -176,7 +178,7 @@ class RedirectToMainPage(Handler):
 class MainPage(Handler):
     '''Shows 10 newest posts.'''
     def get(self):
-        posts = BlogPost.query().order(-BlogPost.postcreated).fetch(limit = 10)
+        posts = BlogPost.query().order(-BlogPost.postcreated).fetch(limit=10)
         if posts:
             self.render('allposts.html', posts=posts)
         else:
@@ -192,7 +194,7 @@ class Signup(Handler):
         username = self.request.get('username')
         # username is set to None when not logged in.
         # username_return is the value returned to the html form
-        username_return  = username
+        username_return = username
         password = self.request.get('password')
         verify = self.request.get('verify')
         email = self.request.get('email')
@@ -206,7 +208,7 @@ class Signup(Handler):
         params = dict(username_return=username_return, email=email)
 
         # run checks on username, password, email. adds error messages
-        user = User.query().filter(User.username==username).get()
+        user = User.query().filter(User.username == username).get()
         if user:
             params['e_username'] = "The username already exists!"
             have_errors = True
@@ -269,7 +271,7 @@ class Login(Handler):
         params = {}
 
         # get info about user from database
-        user = User.query(User.username==username).get()
+        user = User.query(User.username == username).get()
 
         # h is the hashed salted password plus the salt separated by a comma
         if user:
@@ -320,10 +322,13 @@ class Welcome(Handler):
             self.render('welcome.html')
 
 
-
 class CreatePost(Handler):
     '''For adding new posts to the blog.'''
-    items = ('permalink', 'subject', 'content', 'error_subject', 'error_content')
+    items = ('permalink',
+             'subject',
+             'content',
+             'error_subject',
+             'error_content')
     # create dictionary from items and set all values to empty.
     params = dict.fromkeys(items, '')
 
@@ -340,13 +345,18 @@ class CreatePost(Handler):
         permalink = subject.replace(' ', '-')[0:50]
         # letters and numbers only, plus dashes instead of spaces
         # http://stackoverflow.com/a/5843560
-        permalink_alnum = ''.join(e for e in permalink if e.isalnum() or e == '-')
+        permalink_alnum = ''.join(
+            e for e in permalink if e.isalnum() or e == '-'
+        )
 
         # get user info from cookie, to set user as parent
         user = User.by_id(int(self.get_userid()))
 
         if subject and content:
-            post = BlogPost(permalink=permalink_alnum, subject=subject, content=content, parent=user.key)
+            post = BlogPost(permalink=permalink_alnum,
+                            subject=subject,
+                            content=content,
+                            parent=user.key)
             post.put()
             # get new post and redirect to it
             redirect = str(post.permalink)
@@ -373,10 +383,13 @@ class ShowPost(Handler):
         if not postToShow:
             # get user info from cookie, to set user as ancestor
             user = User.by_id(int(self.get_userid()))
-            postToShow = BlogPost.query(ancestor=user.key).filter(BlogPost.permalink == permalink).get()
+            postToShow = BlogPost.query(ancestor=user.key).\
+                filter(BlogPost.permalink == permalink).get()
 
         # now that we have postToShow, get the owner information and comments
-        postOwnerID = User.query(User.key == postToShow.key.parent()).get().key.id()
+        postOwnerID = User.query(
+            User.key == postToShow.key.parent()
+        ).get().key.id()
         comments = Comment.query(ancestor=postToShow.key)\
             .order(Comment.commentcreated).fetch()
 
@@ -388,9 +401,11 @@ class ShowPost(Handler):
             if postOwnerID == int(self.get_userid()):
                 owner = True
 
-
         if postToShow:
-            self.render('showpost.html', post=postToShow, comments=comments, owner=owner)
+            self.render('showpost.html',
+                        post=postToShow,
+                        comments=comments,
+                        owner=owner)
         else:
             self.render('postnotfound.html')
 
@@ -407,12 +422,13 @@ class ShowPost(Handler):
         self.redirect('/blog/%s' % permalink)
 
 
-
 class EditPost(Handler):
     '''Edit a single post from the blog.'''
     def get(self, permalink):
         postToEdit = self.get_post_by_permalink(permalink)
-        postOwnerID = User.query(User.key == postToEdit.key.parent()).get().key.id()
+        postOwnerID = User.query(
+            User.key == postToEdit.key.parent()
+        ).get().key.id()
 
         owner = False
         # check if user is logged in, otherwise
@@ -430,15 +446,19 @@ class EditPost(Handler):
     def post(self, permalink):
         '''Save edit, then get using strong consistency to force update.'''
         postToEdit = self.get_post_by_permalink(permalink)
-        postOwnerID = User.query(User.key == postToEdit.key.parent()).get().key.id()
+        postOwnerID = User.query(
+            User.key == postToEdit.key.parent()
+        ).get().key.id()
 
         postToEdit.subject = self.request.get('subject')
         postToEdit.content = self.request.get('content')
         postToEdit.put()
 
-        # get the post using strong consistency before redirecting back to /blog/permalink
+        # get the post using strong consistency before redirecting
+        # back to /blog/permalink
         user = User.by_id(int(self.get_userid()))
-        force_update = BlogPost.query(ancestor=user.key).filter(BlogPost.permalink == permalink).get()
+        force_update = BlogPost.query(ancestor=user.key).\
+            filter(BlogPost.permalink == permalink).get()
 
         self.redirect('/blog/%s' % permalink)
 
@@ -447,7 +467,9 @@ class DeletePost(Handler):
     '''Delete a single post from the blog.'''
     def get(self, permalink):
         postToDelete = self.get_post_by_permalink(permalink)
-        postOwnerID = User.query(User.key == postToDelete.key.parent()).get().key.id()
+        postOwnerID = User.query(
+            User.key == postToDelete.key.parent()
+        ).get().key.id()
 
         owner = False
         # check if user is logged in, otherwise
@@ -465,7 +487,9 @@ class DeletePost(Handler):
 
     def post(self, permalink):
         postToDelete = self.get_post_by_permalink(permalink)
-        postOwnerID = User.query(User.key == postToDelete.key.parent()).get().key.id()
+        postOwnerID = User.query(
+            User.key == postToDelete.key.parent()
+        ).get().key.id()
         postToDelete.key.delete()
         # redirect to main page.
         # the post still will show up until a refresh. need to fix this
@@ -475,9 +499,11 @@ class DeletePost(Handler):
 class ToggleLikePost(Handler):
     '''Like a single post from the blog.'''
     def get(self, permalink):
-        postOwnerKey = BlogPost.query(BlogPost.permalink == permalink).get().key.parent()
-        postToToggleLike = BlogPost.query(ancestor=postOwnerKey).filter(BlogPost.permalink == permalink).get()
-        # postOwnerID = User.query(User.key == postToLike.key.parent()).get().key.id()
+        postOwnerKey = BlogPost.query(
+            BlogPost.permalink == permalink
+        ).get().key.parent()
+        postToToggleLike = BlogPost.query(ancestor=postOwnerKey).\
+            filter(BlogPost.permalink == permalink).get()
 
         owner = False
         # check if user is logged in, otherwise
@@ -487,7 +513,8 @@ class ToggleLikePost(Handler):
             if postOwnerKey.id() == int(self.get_userid()):
                 owner = True
 
-        # make sure we found the post and that the logged in user is not the post owner
+        # make sure we found the post and that the logged in user is not
+        # the post owner since the owner cannot like his own post
         if postToToggleLike and not owner:
             # if the user has liked the post, unlike it
             if self.get_userid() in postToToggleLike.likes:
@@ -523,7 +550,9 @@ class EditComment(Handler):
         'Comment', 6753750173614080)
         '''
         permalinkKey = comment.key.flat()
-        permalink = BlogPost.get_by_id(permalinkKey[3], parent=ndb.Key('User', permalinkKey[1])).permalink
+        permalink = BlogPost.get_by_id(
+            permalinkKey[3], parent=ndb.Key('User', permalinkKey[1])
+        ).permalink
 
         self.render('editcomment.html', comment=comment, permalink=permalink)
 
@@ -551,7 +580,9 @@ class DeleteComment(Handler):
         'Comment', 6753750173614080)
         '''
         permalinkKey = comment.key.flat()
-        permalink = BlogPost.get_by_id(permalinkKey[3], parent=ndb.Key('User', permalinkKey[1])).permalink
+        permalink = BlogPost.get_by_id(
+            permalinkKey[3], parent=ndb.Key('User', permalinkKey[1])
+        ).permalink
 
         self.render('deletecomment.html', comment=comment, permalink=permalink)
 
@@ -561,9 +592,6 @@ class DeleteComment(Handler):
         comment.key.delete()
 
         self.redirect('/blog/%s' % self.request.get('permalink'))
-
-
-
 
 app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
