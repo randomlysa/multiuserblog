@@ -111,6 +111,7 @@ on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
 
 {#  END link to like a post #}
 
+{# showpost sets owner = True if logged in user is owner of post #}
 {% if owner %}
     <a class="btn btn-primary" href="/blog/{{post.permalink}}/edit">edit post</a>
     <a class="btn btn-danger" href="/blog/{{post.permalink}}/delete">delete post</a>
@@ -144,6 +145,7 @@ on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
 
     <br>
     {{ comment.content }}
+    <br />
     <hr>
 {% endfor %}
 
