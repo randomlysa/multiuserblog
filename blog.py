@@ -144,6 +144,10 @@ class Handler(webapp2.RequestHandler):
         userid = int(self.get_userid())
         return User.get_by_id(userid).username
 
+    def get_post_by_permalink(self, permalink):
+        '''Get permalink, return post.'''
+        return BlogPost.query().filter(BlogPost.permalink == permalink).get()
+
     def render(self, template, **kw):
         '''Send render_str, if the user is logged in, and username to the browser.'''
         # default to None otherwise main page doesn't work when not logged in
@@ -358,7 +362,7 @@ class CreatePost(Handler):
 class ShowPost(Handler):
     '''Show a single post from the blog.'''
     def get(self, permalink):
-        postToShow = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postToShow = self.get_post_by_permalink(permalink)
 
         # if the post isn't found, it's most likely a redirect from /newpost,
         # so try to get the post using an ancestor (strong consistency)
@@ -387,7 +391,7 @@ class ShowPost(Handler):
 
     def post(self, permalink):
         '''Add a comment to ndb.'''
-        post = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        post = self.get_post_by_permalink(permalink)
         comment = self.request.get('comment')
         comment = Comment(
             parent=post.key,
@@ -402,7 +406,7 @@ class ShowPost(Handler):
 class EditPost(Handler):
     '''Edit a single post from the blog.'''
     def get(self, permalink):
-        postToEdit = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postToEdit = self.get_post_by_permalink(permalink)
         postOwnerID = User.query(User.key == postToEdit.key.parent()).get().key.id()
 
         owner = False
@@ -420,7 +424,7 @@ class EditPost(Handler):
 
     def post(self, permalink):
         '''Save edit, then get using strong consistency to force update.'''
-        postToEdit = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postToEdit = self.get_post_by_permalink(permalink)
         postOwnerID = User.query(User.key == postToEdit.key.parent()).get().key.id()
 
         postToEdit.subject = self.request.get('subject')
@@ -437,7 +441,7 @@ class EditPost(Handler):
 class DeletePost(Handler):
     '''Delete a single post from the blog.'''
     def get(self, permalink):
-        postToDelete = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postToDelete = self.get_post_by_permalink(permalink)
         postOwnerID = User.query(User.key == postToDelete.key.parent()).get().key.id()
 
         owner = False
@@ -455,7 +459,7 @@ class DeletePost(Handler):
             self.render('editposterror.html')
 
     def post(self, permalink):
-        postToDelete = BlogPost.query().filter(BlogPost.permalink == permalink).get()
+        postToDelete = self.get_post_by_permalink(permalink)
         postOwnerID = User.query(User.key == postToDelete.key.parent()).get().key.id()
         postToDelete.key.delete()
         # redirect to main page.
