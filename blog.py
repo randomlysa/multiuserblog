@@ -498,16 +498,6 @@ class ToggleLikePost(Handler):
             # make some kind of error handler later
             self.render('editposterror.html')
 
-
-class UpdatePost(Handler):
-    '''Redirect a permalink here to force strong consistency before being
-    redirected back to /blog. Currently used for ToggleLike. '''
-    def get(self, permalink):
-        postOwnerKey = BlogPost.query(BlogPost.permalink == permalink).get().key.parent()
-        postToUpdate = BlogPost.query(ancestor=postOwnerKey).filter(BlogPost.permalink == permalink).get()
-        self.redirect('/blog')
-
-
 app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
     ('/blog', MainPage),
@@ -520,6 +510,5 @@ app = webapp2.WSGIApplication([
     ('/blog/([\w\d-]+)/edit', EditPost),
     ('/blog/([\w\d-]+)/delete', DeletePost),
     ('/blog/([\w\d-]+)/like', ToggleLikePost),
-    ('/blog/([\w\d-]+)/update', UpdatePost),
 
 ], debug=True)
