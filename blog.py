@@ -373,7 +373,8 @@ class ShowPost(Handler):
 
         # now that we have postToShow, get the owner information and comments
         postOwnerID = User.query(User.key == postToShow.key.parent()).get().key.id()
-        comments = Comment.query(ancestor=postToShow.key).fetch()
+        comments = Comment.query(ancestor=postToShow.key)\
+            .order(Comment.commentcreated).fetch()
 
         owner = False
         # check if user is logged in, otherwise
