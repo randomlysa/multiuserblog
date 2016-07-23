@@ -63,6 +63,10 @@ class Comment(ndb.Model):
     commentcreated = ndb.DateTimeProperty(auto_now_add=True)
     commentedited = ndb.DateTimeProperty(auto_now=True)
 
+    def urlsafekey(self, key):
+        '''Returns urlsafe key.'''
+        return self.key.urlsafe()
+
 
 # set regular expressions for checking username, password, email
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
