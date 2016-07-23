@@ -389,21 +389,25 @@ class ShowPost(Handler):
 
         # if the post isn't found, it's most likely a redirect from /newpost,
         # so try to get the post using an ancestor (strong consistency)
+        # in this case the owner should be the logged in user
         if not postToShow:
             # get user info from cookie, to set user as ancestor
             user = User.by_id(int(self.get_userid()))
             postToShow = BlogPost.query(ancestor=user.key).\
                 filter(BlogPost.permalink == permalink).get()
 
+        # get comments
         comments = Comment.query(ancestor=postToShow.key)\
             .order(Comment.commentcreated).fetch()
 
+        # if we found the post, render it
         if postToShow:
             self.render('showpost.html',
                         post=postToShow,
                         comments=comments,
                         # if owner = True, shows links for edit/delete
                         owner=self.check_owner(postToShow.key.parent().id()))
+        # post not found
         else:
             self.render('postnotfound.html')
 
