@@ -535,15 +535,22 @@ class EditComment(Handler):
             permalinkKey[3], parent=ndb.Key('User', permalinkKey[1])
         ).permalink
 
-        self.render('editcomment.html', comment=comment, permalink=permalink)
+        # check that the comment exists and and that user is comment owner
+        if comment and comment.username == self.get_username():
+            self.render('editcomment.html', comment=comment, permalink=permalink)
+        else:
+            self.render('editposterror.html')
 
     def post(self, commentid):
         '''Save updated comment to ndb.'''
         comment = ndb.Key(urlsafe=commentid).get()
         comment.content = self.request.get('content')
-        comment.put()
 
-        self.redirect('/blog/%s' % self.request.get('permalink'))
+        if comment and comment.username == self.get_username():
+            comment.put()
+            self.redirect('/blog/%s' % self.request.get('permalink'))
+        else:
+            self.render('editposterror.html')
 
 
 class DeleteComment(Handler):
@@ -564,15 +571,20 @@ class DeleteComment(Handler):
         permalink = BlogPost.get_by_id(
             permalinkKey[3], parent=ndb.Key('User', permalinkKey[1])
         ).permalink
-
-        self.render('deletecomment.html', comment=comment, permalink=permalink)
+        if comment and comment.username == self.get_username():
+            self.render('deletecomment.html', comment=comment, permalink=permalink)
+        else:
+            self.render('editposterror.html')
 
     def post(self, commentid):
         '''Save updated comment to ndb.'''
         comment = ndb.Key(urlsafe=commentid).get()
-        comment.key.delete()
 
-        self.redirect('/blog/%s' % self.request.get('permalink'))
+        if comment and comment.username == self.get_username():
+            comment.key.delete()
+            self.redirect('/blog/%s' % self.request.get('permalink'))
+        else:
+            self.render('editposterror.html')
 
 app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
