@@ -438,6 +438,8 @@ class EditPost(Handler):
             self.render('editpost.html', post=postToEdit, owner=True)
         else:
             self.render('error.html',
+                        type="post",
+                        action="edit",
                         message="Sorry, we couldn't find that post "
                         "or you are not allowed to edit it."
             )
@@ -462,6 +464,8 @@ class EditPost(Handler):
 
         else:
             self.render('error.html',
+                        type="post",
+                        action="edit",
                         message="Sorry, we couldn't find that post "
                         "or you are not allowed to edit it."
             )
@@ -477,6 +481,8 @@ class DeletePost(Handler):
             self.render('deletepost.html', post=postToDelete, owner=True)
         else:
             self.render('error.html',
+                        type="post",
+                        action="delete",
                         message="Sorry, we couldn't find that post "
                         "or you are not allowed to delete it."
             )
@@ -497,6 +503,8 @@ class DeletePost(Handler):
         # there's an error
         else:
             self.render('error.html',
+                        type="post",
+                        action="delete",
                         message="Sorry, we couldn't find that post "
                         "or you are not allowed to delete it."
             )
@@ -530,6 +538,8 @@ class ToggleLikePost(Handler):
         # post not found or user is owner
         else:
             self.render('error.html',
+                        type="post",
+                        action="like",
                         message="Sorry, we couldn't find that post "
                         "or you are not allowed to like it."
             )
@@ -559,6 +569,8 @@ class EditComment(Handler):
             self.render('editcomment.html', comment=comment, permalink=permalink)
         else:
             self.render('error.html',
+                        type="comment",
+                        action="edit",
                         message="Sorry, we couldn't find that comment "
                         "or you are not allowed to edit it."
             )
@@ -573,6 +585,8 @@ class EditComment(Handler):
             self.redirect('/blog/%s' % self.request.get('permalink'))
         else:
             self.render('error.html',
+                        type="comment",
+                        action="edit",
                         message="Sorry, we couldn't find that comment "
                         "or you are not allowed to edit it."
             )
@@ -600,6 +614,8 @@ class DeleteComment(Handler):
             self.render('deletecomment.html', comment=comment, permalink=permalink)
         else:
             self.render('error.html',
+                        type="comment",
+                        action="delete",
                         message="Sorry, we couldn't find that comment "
                         "or you are not allowed to delete it."
             )
@@ -613,6 +629,8 @@ class DeleteComment(Handler):
             self.redirect('/blog/%s' % self.request.get('permalink'))
         else:
             self.render('error.html',
+                        type="comment",
+                        action="delete",
                         message="Sorry, we couldn't find that comment "
                         "or you are not allowed to delete it."
             )
