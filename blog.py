@@ -432,7 +432,10 @@ class EditPost(Handler):
         if postToEdit and self.check_owner(postToEdit.key.parent().id()):
             self.render('editpost.html', post=postToEdit, owner=True)
         else:
-            self.render('editposterror.html')
+            self.render('error.html',
+                        message="Sorry, we couldn't find that post "
+                        "or you are not allowed to edit it."
+            )
 
     def post(self, permalink):
         '''Save edit, then get using strong consistency to force update.'''
@@ -453,7 +456,10 @@ class EditPost(Handler):
             self.redirect('/blog/%s' % permalink)
 
         else:
-            self.render('editposterror.html')
+            self.render('error.html',
+                        message="Sorry, we couldn't find that post "
+                        "or you are not allowed to edit it."
+            )
 
 
 class DeletePost(Handler):
@@ -465,8 +471,10 @@ class DeletePost(Handler):
         if postToDelete and self.check_owner(postToDelete.key.parent().id()):
             self.render('deletepost.html', post=postToDelete, owner=True)
         else:
-            # make some kind of error handler later
-            self.render('editposterror.html')
+            self.render('error.html',
+                        message="Sorry, we couldn't find that post "
+                        "or you are not allowed to delete it."
+            )
 
     def post(self, permalink):
         postToDelete = self.get_post_by_permalink(permalink)
@@ -483,7 +491,11 @@ class DeletePost(Handler):
             self.redirect('/blog')
         # there's an error
         else:
-            self.render('editposterror.html')
+            self.render('error.html',
+                        message="Sorry, we couldn't find that post "
+                        "or you are not allowed to delete it."
+            )
+
 
 class ToggleLikePost(Handler):
     '''Like a single post from the blog.'''
@@ -512,8 +524,10 @@ class ToggleLikePost(Handler):
 
         # post not found or user is owner
         else:
-            # make some kind of error handler later
-            self.render('editposterror.html')
+            self.render('error.html',
+                        message="Sorry, we couldn't find that post "
+                        "or you are not allowed to like it."
+            )
 
 
 class EditComment(Handler):
@@ -539,7 +553,10 @@ class EditComment(Handler):
         if comment and comment.username == self.get_username():
             self.render('editcomment.html', comment=comment, permalink=permalink)
         else:
-            self.render('editposterror.html')
+            self.render('error.html',
+                        message="Sorry, we couldn't find that comment "
+                        "or you are not allowed to edit it."
+            )
 
     def post(self, commentid):
         '''Save updated comment to ndb.'''
@@ -550,7 +567,10 @@ class EditComment(Handler):
             comment.put()
             self.redirect('/blog/%s' % self.request.get('permalink'))
         else:
-            self.render('editposterror.html')
+            self.render('error.html',
+                        message="Sorry, we couldn't find that comment "
+                        "or you are not allowed to edit it."
+            )
 
 
 class DeleteComment(Handler):
@@ -574,7 +594,10 @@ class DeleteComment(Handler):
         if comment and comment.username == self.get_username():
             self.render('deletecomment.html', comment=comment, permalink=permalink)
         else:
-            self.render('editposterror.html')
+            self.render('error.html',
+                        message="Sorry, we couldn't find that comment "
+                        "or you are not allowed to delete it."
+            )
 
     def post(self, commentid):
         '''Save updated comment to ndb.'''
@@ -584,7 +607,10 @@ class DeleteComment(Handler):
             comment.key.delete()
             self.redirect('/blog/%s' % self.request.get('permalink'))
         else:
-            self.render('editposterror.html')
+            self.render('error.html',
+                        message="Sorry, we couldn't find that comment "
+                        "or you are not allowed to delete it."
+            )
 
 app = webapp2.WSGIApplication([
     ('/', RedirectToMainPage),
