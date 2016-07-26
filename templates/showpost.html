@@ -78,6 +78,20 @@ on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
 
 {# link to like a post #}
 
+    {# not logged in - redirect to login when trying to like #}
+        {% if not userid %}
+
+            {# if the post has at least one like, show star, otherwise, show star-empty #}
+            {% if post.likes %}
+                <a href="/blog/login/{{post.permalink}}"><span class="glyphicon glyphicon-star"></span></a>
+            {% endif %}
+            {% if not post.likes %}
+                <a href="/blog/login/{{post.permalink}}"><span class="glyphicon glyphicon-star-empty"></span></a>
+            {% endif %}
+
+        {% endif %}
+    {# end not logged in section #}
+
     {# if userid AND logged in userid does NOT equal post.parent.id, allow to like #}
     {% if userid|int() and userid|int() != post.key.parent().id()|int() %}
 
