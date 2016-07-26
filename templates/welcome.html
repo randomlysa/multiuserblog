@@ -2,6 +2,10 @@
 {% block title %}Welcome{% endblock %}
 {% block content %}
 
-Welcome, {{username}}
+Welcome, {{username}}.
+
+{% if redirectURL %}
+    It looks like you came here from <a href="/blog/{{ redirectURL }}">{{redirectURL}}</a>.
+{% endif %}
 
 {% endblock %}

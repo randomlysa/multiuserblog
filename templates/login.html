@@ -7,7 +7,7 @@
 <div class="col-md-6 login">
     <h1 class="text-center">Login | <a href="/blog/signup">Signup</a></h1>
 
-    <form action="/blog/login" method="post">
+    <form action="/blog/login/{{redirectURL}}" method="post">
         <div>
             <input type="text" name="username" placeholder="Username" value="{% if username != None %}{{username}}{% endif %}">
             <div class="error">{{e_username}}</div>

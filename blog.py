@@ -271,10 +271,10 @@ class Signup(Handler):
 
 class Login(Handler):
     '''Allows a registered user to login.'''
-    def get(self):
-        self.render('login.html')
+    def get(self, redirectURL=''):
+        self.render('login.html', redirectURL=redirectURL)
 
-    def post(self):
+    def post(self, redirectURL=''):
         username = self.request.get('username')
         password = self.request.get('password')
 
@@ -307,7 +307,7 @@ class Login(Handler):
                 'Set-Cookie', 'userid=%s' %
                 make_secure_val(str(user.key.integer_id()))
             )
-            self.redirect('/blog/welcome')
+            self.redirect('/blog/welcome/%s' % redirectURL)
         # anything else
         else:
             # return the username to the form
@@ -324,13 +324,13 @@ class Logout(Handler):
 
 class Welcome(Handler):
     '''Redirected here on a successful signup.'''
-    def get(self):
+    def get(self, redirectURL=''):
         # if no cookie, send to signup
         if not self.get_userid():
             self.redirect('/blog/signup')
         # if the userid/hash are correct in the cookie, send to welcome page.
         else:
-            self.render('welcome.html')
+            self.render('welcome.html', redirectURL=redirectURL)
 
 
 class CreatePost(Handler):
