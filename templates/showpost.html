@@ -92,36 +92,38 @@ on {{ post.postcreated.strftime("%A, %B %d, %Y @ %H:%I") }}
         {% endif %}
     {# end not logged in section #}
 
-    {# if userid AND logged in userid does NOT equal post.parent.id, allow to like #}
-    {% if userid|int() and userid|int() != post.key.parent().id()|int() %}
+    {# do not allow like - logged in and owner #}
+        {% if userid|int() == post.key.parent().id()|int() %}
 
-        {% if userid in post.likes %}
-            {# logged in user has liked this post #}
-            <a href="javascript:makeGetRequest('{{post.permalink}}')">
-            <!-- <a href="/blog/{{post.permalink}}/like"> -->
-            <span class="like-update glyphicon glyphicon-star"></span></a>
+            {# if the post has at least one like, show star, otherwise, show star-empty #}
+            {% if post.likes %}
+                <a href="javascript:alert('You cannot like your own post!')"><span class="glyphicon glyphicon-star"></span></a>
+            {% endif %}
+            {% if not post.likes %}
+                <a href="javascript:alert('You cannot like your own post!')"><span class="glyphicon glyphicon-star-empty"></span></a>
+            {% endif %}
         {% endif %}
+    {# end do not allow like section #}
 
-        {% if userid not in post.likes %}
-            {# logged in user has NOT liked this post #}
-            <a href="javascript:makeGetRequest('{{post.permalink}}')">
-            <!-- <a href="/blog/{{post.permalink}}/like"> -->
-            <span class="like-update glyphicon glyphicon-star-empty"></span></a>
+    {# allow like - user logged in and not owner #}
+        {% if userid|int() and userid|int() != post.key.parent().id()|int() %}
+
+            {% if userid in post.likes %}
+                {# logged in user has liked this post #}
+                <a href="javascript:makeGetRequest('{{post.permalink}}')">
+                <!-- <a href="/blog/{{post.permalink}}/like"> -->
+                <span class="like-update glyphicon glyphicon-star"></span></a>
+            {% endif %}
+
+            {% if userid not in post.likes %}
+                {# logged in user has NOT liked this post #}
+                <a href="javascript:makeGetRequest('{{post.permalink}}')">
+                <!-- <a href="/blog/{{post.permalink}}/like"> -->
+                <span class="like-update glyphicon glyphicon-star-empty"></span></a>
+            {% endif %}
+
         {% endif %}
-
-    {% endif %}
-
-    {# if NOT userid (not logged in) OR logged in userid DOES equal post.parent.id, do NOT allow to like #}
-    {% if not userid or userid|int() == post.key.parent().id()|int() %}
-
-        {# if the post has at least one like, show star, otherwise, show star-empty #}
-        {% if post.likes %}
-            <a href="javascript:alert('You cannot like your own post!')"><span class="glyphicon glyphicon-star"></span></a>
-        {% endif %}
-        {% if not post.likes %}
-            <a href="javascript:alert('You cannot like your own post!')"><span class="glyphicon glyphicon-star-empty"></span></a>
-        {% endif %}
-    {% endif %}
+    {# end allow to like section #}
 
 {#  END link to like a post #}
 
