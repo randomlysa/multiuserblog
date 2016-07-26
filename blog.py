@@ -360,6 +360,9 @@ class CreatePost(Handler):
         permalink_alnum = ''.join(
             e for e in permalink if e.isalnum() or e == '-'
         )
+        # remove dash from end of permalink
+        if permalink_alnum[-1] == '-':
+            permalink_alnum = permalink_alnum[0:-1]
 
         # get user info from cookie, to set user as parent
         user = User.by_id(int(self.get_userid()))
