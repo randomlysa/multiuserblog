@@ -146,8 +146,10 @@ class Handler(webapp2.RequestHandler):
 
     def get_username(self):
         '''Returns the username from a cookie userid.'''
-        userid = int(self.get_userid())
-        return User.get_by_id(userid).username
+        if self.get_userid():
+            userid = int(self.get_userid())
+            return User.get_by_id(userid).username
+
 
     def get_post_by_permalink(self, permalink):
         '''Get permalink, return post.'''
