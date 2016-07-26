@@ -298,8 +298,6 @@ class Login(Handler):
         if username and password and not valid_pw(username, password, h):
             params['e_username'] = "Incorrect username or password."
 
-        logging.info(user.key.integer_id())
-
         # valid login
         if valid_pw(username, password, h):
             # set a cookie with the userid|hash of userid
