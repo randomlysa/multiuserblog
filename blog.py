@@ -304,7 +304,7 @@ class Login(Handler):
         if valid_pw(username, password, h):
             # set a cookie with the userid|hash of userid
             self.response.headers.add_header(
-                'Set-Cookie', 'userid=%s' %
+                'Set-Cookie', 'userid=%s;path=/blog' %
                 make_secure_val(str(user.key.integer_id()))
             )
             self.redirect('/blog/welcome/%s' % redirectURL)
