@@ -345,7 +345,10 @@ class CreatePost(Handler):
         if self.get_userid():
             self.render('newpost.html', **CreatePost.params)
         else:
-            self.render('noaccess.html')
+            self.render('error.html',
+                        message="Sorry, you do not have access to that page. "
+                        "Please sign up or log in."
+            )
 
     def post(self):
         # post contents
